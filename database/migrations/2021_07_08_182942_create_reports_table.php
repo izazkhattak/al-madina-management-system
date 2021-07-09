@@ -30,7 +30,7 @@ class CreateReportsTable extends Migration
             $table->date('paid_on');
             $table->integer('ds_dd_no');
             $table->integer('out_stand');
-            $table->decimal('out_stand', 10, 2);
+            $table->decimal('sur_charge', 10, 2);
 
             $table->timestamps();
         });
