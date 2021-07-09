@@ -14,7 +14,8 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        //
+        $data = Project::paginate(20);
+        return view('Project.index', compact('data'));
     }
 
     /**

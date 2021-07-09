@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\InstallmentController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectPlanController;
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -24,3 +29,9 @@ Auth::routes([
 ]);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::resource('projects', ProjectController::class);
+Route::resource('project-plans', ProjectPlanController::class);
+Route::resource('clients', ClientController::class);
+Route::resource('installments', InstallmentController::class);
+Route::resource('reports', ReportController::class);
