@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProjectRequest;
 use App\Models\Project;
 use Illuminate\Http\Request;
 
@@ -14,8 +15,8 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $data = Project::paginate(20);
-        return view('Project.index', compact('data'));
+        $projects = Project::all();
+        return view('Project.index', compact('projects'));
     }
 
     /**
@@ -25,7 +26,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        return view('Project.add');
     }
 
     /**
@@ -34,9 +35,10 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProjectRequest $request)
     {
-        //
+        Project::create($request->validated());
+        return redirect()->route('projects.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
     }
 
     /**
@@ -47,7 +49,7 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
-        //
+        return view('Project.show', compact('project'));
     }
 
     /**
@@ -58,7 +60,7 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        //
+        return view('Project.edit', compact('project'));
     }
 
     /**
@@ -68,9 +70,10 @@ class ProjectController extends Controller
      * @param  \App\Models\Project  $project
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Project $project)
+    public function update(ProjectRequest $request, Project $project)
     {
-        //
+        $project->update($request->validated());
+        return redirect()->route('projects.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
     }
 
     /**
@@ -81,6 +84,7 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        //
+        $project->delete();
+        return redirect()->route('projects.index')->with(['status'=> 'success', 'message'=> 'Record successfully deleted.']);
     }
 }

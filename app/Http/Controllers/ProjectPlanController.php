@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProjectPlanRequest;
+use App\Models\Project;
 use App\Models\ProjectPlan;
 use Illuminate\Http\Request;
 
@@ -14,7 +16,8 @@ class ProjectPlanController extends Controller
      */
     public function index()
     {
-        //
+        $plans = ProjectPlan::all();
+        return view('ProjectPlan.index', compact('plans'));
     }
 
     /**
@@ -24,7 +27,8 @@ class ProjectPlanController extends Controller
      */
     public function create()
     {
-        //
+        $projects = Project::all();
+        return view('ProjectPlan.add', compact('projects'));
     }
 
     /**
@@ -33,9 +37,10 @@ class ProjectPlanController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProjectPlanRequest $request)
     {
-        //
+        ProjectPlan::create($request->validated());
+        return redirect()->route('project-plans.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
     }
 
     /**
@@ -46,7 +51,7 @@ class ProjectPlanController extends Controller
      */
     public function show(ProjectPlan $projectPlan)
     {
-        //
+        return view('ProjectPlan.show', compact('projectPlan'));
     }
 
     /**
@@ -57,7 +62,8 @@ class ProjectPlanController extends Controller
      */
     public function edit(ProjectPlan $projectPlan)
     {
-        //
+        $projects = Project::all();
+        return view('ProjectPlan.edit', compact('projectPlan', 'projects'));
     }
 
     /**
@@ -67,9 +73,10 @@ class ProjectPlanController extends Controller
      * @param  \App\Models\ProjectPlan  $projectPlan
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProjectPlan $projectPlan)
+    public function update(ProjectPlanRequest $request, ProjectPlan $projectPlan)
     {
-        //
+        $projectPlan->update($request->validated());
+        return redirect()->route('project-plans.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
     }
 
     /**
@@ -80,6 +87,7 @@ class ProjectPlanController extends Controller
      */
     public function destroy(ProjectPlan $projectPlan)
     {
-        //
+        $projectPlan->delete();
+        return redirect()->route('project-plans.index')->with(['status'=> 'success', 'message'=> 'Record successfully deleted.']);
     }
 }

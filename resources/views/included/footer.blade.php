@@ -2,7 +2,7 @@
 <script type="application/javascript" src="{{ asset('plugins/jquery/jquery.min.js') }}" defer></script>
 
 <!-- Bootstrap Core Js -->
-<script type="application/javascript" src="{{ asset('plugins/bootstrap/js/bootstrap.min.js') }}"></script>
+<script type="application/javascript" src="{{ asset('plugins/bootstrap/js/bootstrap.min.js') }}" defer></script>
 
 {{-- <!-- Slimscroll Plugin Js --> --}}
 <script type="application/javascript" src="{{ asset('plugins/jquery-slimscroll/jquery.slimscroll.js') }}" defer></script>

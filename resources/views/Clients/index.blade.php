@@ -9,11 +9,11 @@
                 <div class="card">
                     <div class="header">
                         <h2>
-                            Projects
+                            Clients
                         </h2>
                         <ul class="header-dropdown m-t--5">
                             <li>
-                                <a href="{{ route('projects.create') }}" type="button" class="btn bg-indigo waves-effect">Add New</a>
+                                <a href="{{ route('clients.create') }}" type="button" class="btn bg-indigo waves-effect">Add New</a>
                             </li>
                         </ul>
                     </div>
@@ -23,36 +23,51 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Title</th>
-                                        <th>Description</th>
-                                        <th>Created at</th>
+                                        <th>Name</th>
+                                        <th>Phone</th>
+                                        <th>CNIC</th>
+                                        <th>Project plan</th>
+                                        <th>Down payment</th>
+                                        <th>Due date</th>
+                                        <th>Monthly installments</th>
+                                        <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Title</th>
-                                        <th>Description</th>
-                                        <th>Created at</th>
+                                        <th>Name</th>
+                                        <th>Phone</th>
+                                        <th>CNIC</th>
+                                        <th>Project plan</th>
+                                        <th>Down payment</th>
+                                        <th>Due date</th>
+                                        <th>Monthly installments</th>
+                                        <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
-                                    @forelse ($projects as $project)
+                                    @forelse ($plans as $plan)
 
-                                        <tr onclick="{{ 'window.location.href='.'"'.route('projects.show', $project->id).'"' }}">
-                                            <td>{{ $project->id }}</td>
-                                            <td>{{ $project->title }}</td>
-                                            <td>{{ $project->description }}</td>
-                                            <td>{{ $project->created_at->format('Y-m-d H:i') }}</td>
+                                        <tr onclick="{{ 'window.location.href='.'"'.route('clients.show', $plan->id).'"' }}">
+                                            <td>{{ $plan->id }}</td>
+                                            <td>{{ $plan->name }}</td>
+                                            <td>{{ $plan->phone }}</td>
+                                            <td>{{ $plan->cnic }}</td>
+                                            <td>{{ $plan->project_plan_id }}</td>
+                                            <td>{{ $plan->down_payment }}</td>
+                                            <td>{{ $plan->due_date }}</td>
+                                            <td>{{ $plan->monthly_installments }}</td>
+                                            <td>{{ $plan->created_at }}</td>
                                             <td>
-                                                <a class="btn padding-0 btn-circle" href="{{ route('projects.edit', $project->id) }}">
+                                                <a class="btn padding-0 btn-circle" href="{{ route('clients.edit', $plan->id) }}">
                                                     <button type="button" class="btn bg-green btn-circle waves-effect waves-circle waves-float">
                                                         <i class="material-icons">mode_edit</i>
                                                     </button>
                                                 </a>
-                                                <form class="btn padding-0 btn-circle" action="{{ route('projects.destroy', $project->id) }}" method="POST">
+                                                <form class="btn padding-0 btn-circle" action="{{ route('clients.destroy', $plan->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn bg-pink btn-circle waves-effect waves-circle waves-float">

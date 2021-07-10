@@ -16,22 +16,24 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 Route::get('/', function () {
     return view('auth.login');
 });
 
 Auth::routes([
-  'register' => false, // Registration Routes...
-  'reset' => false, // Password Reset Routes...
-  'verify' => false, // Email Verification Routes...
+    'register' => false, // Registration Routes...
+    'reset' => false, // Password Reset Routes...
+    'verify' => false, // Email Verification Routes...
 ]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::middleware('auth')->group(function () {
+    Route::get('/home', [ProjectController::class, 'index'])->name('home');
 
-Route::resource('projects', ProjectController::class);
-Route::resource('project-plans', ProjectPlanController::class);
-Route::resource('clients', ClientController::class);
-Route::resource('installments', InstallmentController::class);
-Route::resource('reports', ReportController::class);
+    Route::resource('projects', ProjectController::class);
+    Route::resource('project-plans', ProjectPlanController::class);
+    Route::resource('clients', ClientController::class);
+    Route::resource('installments', InstallmentController::class);
+    Route::resource('reports', ReportController::class);
+});

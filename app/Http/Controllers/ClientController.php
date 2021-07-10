@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ClientRequest;
 use App\Models\Client;
+use App\Models\ProjectPlan;
 use Illuminate\Http\Request;
 
 class ClientController extends Controller
@@ -14,7 +16,8 @@ class ClientController extends Controller
      */
     public function index()
     {
-        //
+        $plans = Client::all();
+        return view('Clients.index', compact('plans'));
     }
 
     /**
@@ -24,7 +27,8 @@ class ClientController extends Controller
      */
     public function create()
     {
-        //
+        $projectPlan  = ProjectPlan::all();
+        return view('Clients.add', compact('projectPlan'));
     }
 
     /**
@@ -33,9 +37,10 @@ class ClientController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ClientRequest $request)
     {
-        //
+        Client::create($request->validated());
+        return redirect()->route('clients.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
     }
 
     /**
@@ -46,7 +51,7 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
-        //
+        return view('Clients.show', compact('client'));
     }
 
     /**
@@ -57,7 +62,8 @@ class ClientController extends Controller
      */
     public function edit(Client $client)
     {
-        //
+        $projectPlan  = ProjectPlan::all();
+        return view('Clients.edit', compact('client', 'projectPlan'));
     }
 
     /**
@@ -67,9 +73,10 @@ class ClientController extends Controller
      * @param  \App\Models\Client  $client
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Client $client)
+    public function update(ClientRequest $request, Client $client)
     {
-        //
+        $client->update($request->validated());
+        return redirect()->route('clients.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
     }
 
     /**
@@ -80,6 +87,7 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
-        //
+        $client->delete();
+        return redirect()->route('clients.index')->with(['status'=> 'success', 'message'=> 'Record successfully deleted.']);
     }
 }
