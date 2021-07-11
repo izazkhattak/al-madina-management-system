@@ -65,7 +65,7 @@
                                                 <form class="btn padding-0 btn-circle" action="{{ route('project-plans.destroy', $plan->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn bg-pink btn-circle waves-effect waves-circle waves-float">
+                                                    <button type="submit" class="btn bg-pink btn-circle waves-effect waves-circle waves-float" data-type="form-confirm">
                                                         <i class="material-icons">delete_forever</i>
                                                     </button>
                                                 </form>

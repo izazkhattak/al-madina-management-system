@@ -26,6 +26,9 @@
     <!-- Bootstrap Select Css -->
     <link href="{{ asset('plugins/bootstrap-select/css/bootstrap-select.css') }}" rel="stylesheet" />
 
+    <!-- Sweetalert Css -->
+    <link href="{{ asset('plugins/sweetalert/sweetalert.css') }}" rel="stylesheet" />
+
     @yield('styles')
 
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
@@ -77,7 +80,26 @@
             $(document).ready(function() {
                 setTimeout(() => {
                     $('.system-alerts-messages').fadeOut(100);
-                }, 5 * 1000)
+                }, 5 * 1000);
+            });
+
+            $(document).on('click', '[data-type="form-confirm"]', function(e) {
+                e.preventDefault();
+                let $this = $(this);
+                swal({
+                    title: "Are you sure?",
+                    text: "You will not be able to recover this back!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    closeOnConfirm: false
+                }, function (isConfirm) {
+                    if(isConfirm){
+                        $this.closest('form').submit();
+                        // swal("Deleted!", "Your record has been deleted.", "success");
+                    }
+                });
             });
         </script>
 

@@ -15,3 +15,8 @@
 
 <!-- Custom Js -->
 <script type="application/javascript" src="{{ asset('js/admin.js') }}" defer></script>
+
+
+<!-- SweetAlert Plugin Js -->
+<script src="{{ asset('plugins/sweetalert/sweetalert.min.js') }}" defer></script>
+<script src="{{ asset('js/pages/ui/dialogs.js') }}"></script>
