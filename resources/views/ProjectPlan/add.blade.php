@@ -48,12 +48,9 @@
                                 @enderror
                             </div>
                             <div class="form-group form-float">
-                                <div class="input-group">
-                                    <div class="form-line">
-                                        <input type="text" value="{{ old('name', isset($edit_installment_years) ? $edit_installment_years : '') }}" name="installment_years" class="form-control">
-                                        <label class="form-label">Installment years</label>
-                                    </div>
-                                    <span class="input-group-addon">%</span>
+                                <div class="form-line">
+                                    <input type="text" value="{{ old('name', isset($edit_installment_years) ? $edit_installment_years : '') }}" name="installment_years" class="form-control">
+                                    <label class="form-label">Installment years</label>
                                 </div>
                                 @error('installment_years')
                                     <label class="error" role="alert">
