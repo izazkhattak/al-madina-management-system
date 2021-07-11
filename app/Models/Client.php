@@ -15,4 +15,8 @@ class Client extends Model
         'due_date',
         'monthly_installments'
     ];
+
+    public function projectPlan() {
+        return $this->belongsTo(ProjectPlan::class);
+    }
 }

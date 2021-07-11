@@ -1,11 +1,13 @@
 @extends('Project.add')
 
-@section("editId", $project->id)
-@section("editTitle", $project->title)
-@section("editDescription", $project->description)
+<?php
 
+$edit_title = $project->title;
+$edit_description = $project->description;
 
-<?php $id = $project->id; ?>
+$id = $project->id;
+
+?>
 
 @section("editMethod")
 	{{ method_field("PUT") }}

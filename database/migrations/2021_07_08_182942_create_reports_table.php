@@ -24,13 +24,13 @@ class CreateReportsTable extends Migration
                 ->constrained()
                 ->onDelete('cascade');
 
-            $table->decimal('due_amount', 10, 2);
+            $table->decimal('due_amount', 20, 2);
             $table->date('due_date');
-            $table->decimal('paid', 10, 2);
+            $table->decimal('paid', 20, 2);
             $table->date('paid_on');
             $table->integer('ds_dd_no');
             $table->integer('out_stand');
-            $table->decimal('sur_charge', 10, 2);
+            $table->decimal('sur_charge', 20, 2);
 
             $table->timestamps();
         });

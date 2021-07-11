@@ -1,7 +1,7 @@
 ﻿@extends('layouts.app_main')
 
 @section('content')
-<section class="content">
+<section>
     <div class="container-fluid">
         <!-- Basic Examples -->
         <div class="row clearfix">
@@ -46,21 +46,22 @@
                                 </tfoot>
                                 <tbody>
                                     @forelse ($plans as $plan)
-
-                                        <tr onclick="{{ 'window.location.href='.'"'.route('project-plans.show', $plan->id).'"' }}">
+                                    {{-- onclick="{{ 'window.location.href='.'"'.route('project-plans.show', $plan->id).'"' }}" --}}
+                                        <tr>
                                             <td>{{ $plan->id }}</td>
                                             <td>{{ $plan->project->title }}</td>
-                                            <td>{{ $plan->installment_years }}</td>
-                                            <td>{{ $plan->total_amount }}</td>
-                                            <td>{{ $plan->sur_charge }}</td>
-                                            <td>{{ $plan->dealer_commission }}</td>
+                                            <td>{{ $plan->installment_years }} Year's</td>
+                                            <td>{{ number_format($plan->total_amount, 2) }}</td>
+                                            <td>{{ $plan->sur_charge }}%</td>
+                                            <td>{{ $plan->dealer_commission }}%</td>
                                             <td>{{ $plan->created_at }}</td>
                                             <td>
-                                                <a class="btn padding-0 btn-circle" href="{{ route('project-plans.edit', $plan->id) }}">
+                                                {{-- To activate editing, remove except method from resourse route --}}
+                                                {{-- <a class="btn padding-0 btn-circle" href="{{ route('project-plans.edit', $plan->id) }}">
                                                     <button type="button" class="btn bg-green btn-circle waves-effect waves-circle waves-float">
                                                         <i class="material-icons">mode_edit</i>
                                                     </button>
-                                                </a>
+                                                </a> --}}
                                                 <form class="btn padding-0 btn-circle" action="{{ route('project-plans.destroy', $plan->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
@@ -91,15 +92,6 @@
 {{-- <!-- Jquery DataTable Plugin Js --> --}}
 <script type="application/javascript" src="{{ asset('plugins/jquery-datatable/jquery.dataTables.js') }}" defer></script>
 <script type="application/javascript" src="{{ asset('plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js') }}" defer></script>
-
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js') }}" defer></script>
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/extensions/export/buttons.flash.min.js') }}" defer></script>
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/extensions/export/jszip.min.js') }}" defer></script>
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/extensions/export/pdfmake.min.js') }}" defer></script>
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/extensions/export/vfs_fonts.js') }}" defer></script>
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/extensions/export/buttons.html5.min.js') }}" defer></script>
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/extensions/export/buttons.print.min.js') }}" defer></script>
-
 <script type="application/javascript" src="{{ asset('js/pages/tables/jquery-datatable.js') }}" defer></script>
 @endsection
 

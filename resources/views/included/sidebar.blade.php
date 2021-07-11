@@ -12,21 +12,33 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{ url('projects') }}">
+                    <a href="{{ route('projects.index') }}">
                         <i class="material-icons">settings_input_composite</i>
                         <span>Project</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ url('project-plans') }}">
+                    <a href="{{ route('project-plans.index') }}">
                         <i class="material-icons">wb_incandescent</i>
                         <span>Project Plan</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ url('clients') }}">
+                    <a href="{{ route('clients.index') }}">
                         <i class="material-icons">account_circle</i>
                         <span>Clients</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('installments.index') }}">
+                        <i class="material-icons">gavel</i>
+                        <span>Installments</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('reports.index') }}">
+                        <i class="material-icons">report</i>
+                        <span>Reports</span>
                     </a>
                 </li>
             </ul>

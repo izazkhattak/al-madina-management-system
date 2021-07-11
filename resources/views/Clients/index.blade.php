@@ -1,7 +1,7 @@
 ﻿@extends('layouts.app_main')
 
 @section('content')
-<section class="content">
+<section>
     <div class="container-fluid">
         <!-- Basic Examples -->
         <div class="row clearfix">
@@ -50,14 +50,14 @@
                                 </tfoot>
                                 <tbody>
                                     @forelse ($plans as $plan)
-
-                                        <tr onclick="{{ 'window.location.href='.'"'.route('clients.show', $plan->id).'"' }}">
+                                    {{-- onclick="{{ 'window.location.href='.'"'.route('clients.show', $plan->id).'"' }}" --}}
+                                        <tr>
                                             <td>{{ $plan->id }}</td>
                                             <td>{{ $plan->name }}</td>
                                             <td>{{ $plan->phone }}</td>
                                             <td>{{ $plan->cnic }}</td>
-                                            <td>{{ $plan->project_plan_id }}</td>
-                                            <td>{{ $plan->down_payment }}</td>
+                                            <td>{{ number_format($plan->projectPlan->total_amount, 2) }}</td>
+                                            <td>{{ number_format($plan->down_payment, 2) }}</td>
                                             <td>{{ $plan->due_date }}</td>
                                             <td>{{ $plan->monthly_installments }}</td>
                                             <td>{{ $plan->created_at }}</td>
@@ -97,15 +97,6 @@
 {{-- <!-- Jquery DataTable Plugin Js --> --}}
 <script type="application/javascript" src="{{ asset('plugins/jquery-datatable/jquery.dataTables.js') }}" defer></script>
 <script type="application/javascript" src="{{ asset('plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js') }}" defer></script>
-
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js') }}" defer></script>
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/extensions/export/buttons.flash.min.js') }}" defer></script>
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/extensions/export/jszip.min.js') }}" defer></script>
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/extensions/export/pdfmake.min.js') }}" defer></script>
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/extensions/export/vfs_fonts.js') }}" defer></script>
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/extensions/export/buttons.html5.min.js') }}" defer></script>
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/extensions/export/buttons.print.min.js') }}" defer></script>
-
 <script type="application/javascript" src="{{ asset('js/pages/tables/jquery-datatable.js') }}" defer></script>
 @endsection
 

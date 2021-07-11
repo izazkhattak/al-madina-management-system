@@ -465,5 +465,18 @@ $(function () {
     $.AdminBSB.select.activate();
     $.AdminBSB.search.activate();
 
+    $(document).on('keyup', '.money-format-input', function(event) {
+        // skip for arrow keys
+        if(event.which >= 37 && event.which <= 40){
+            event.preventDefault();
+        }
+
+        $(this).val(function(index, value) {
+            return value
+            .replace(/\D/g, "")
+            .replace(/([0-9])([0-9]{2})$/, '$1.$2')
+            .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
+        });
+    });
     setTimeout(function () { $('.page-loader-wrapper').fadeOut(); }, 50);
 });

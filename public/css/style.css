@@ -3,6 +3,9 @@
 ul {
     list-style: none;
 }
+.form-group .form-line .form-label {
+    z-index: 2 !important;
+}
 .navbar {
   font-family: "Roboto", sans-serif;
   -webkit-border-radius: 0;
@@ -4099,6 +4102,10 @@ section.content {
       box-shadow: none !important;
       border: none;
       margin-left: 30px; }
+      .bootstrap-select .bs-searchbox .form-control {
+          margin-left: 0 !important;
+          padding-left: 40px;
+      }
   .bootstrap-select .bs-searchbox {
     position: relative; }
     .bootstrap-select .bs-searchbox:after {

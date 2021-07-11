@@ -1,7 +1,14 @@
 @extends('layouts.app_main')
 
+@section('styles')
+<!-- Colorpicker Css -->
+<link href="{{ asset('plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css') }}" rel="stylesheet" />
+    <!-- Bootstrap Spinner Css -->
+    <link href="{{ asset('plugins/jquery-spinner/css/bootstrap-spinner.css') }}" rel="stylesheet">
+@endsection
+
 @section('content')
-<section class="content">
+<section>
     <div class="container-fluid">
         <!-- Basic Validation -->
         <div class="row clearfix">
@@ -41,9 +48,12 @@
                                 @enderror
                             </div>
                             <div class="form-group form-float">
-                                <div class="form-line">
-                                    <input type="number" value="@yield('edit_installment_years')" name="installment_years" class="form-control">
-                                    <label class="form-label">Installment years</label>
+                                <div class="input-group">
+                                    <div class="form-line">
+                                        <input type="text" value="{{ old('name', isset($edit_installment_years) ? $edit_installment_years : '') }}" name="installment_years" class="form-control">
+                                        <label class="form-label">Installment years</label>
+                                    </div>
+                                    <span class="input-group-addon">%</span>
                                 </div>
                                 @error('installment_years')
                                     <label class="error" role="alert">
@@ -53,7 +63,7 @@
                             </div>
                             <div class="form-group form-float">
                                 <div class="form-line">
-                                    <input type="number" value="@yield('edit_total_amount')" name="total_amount" class="form-control">
+                                    <input type="text" value="{{ old('total_amount', isset($edit_total_amount) ? number_format($edit_total_amount, 2) : '') }}" name="total_amount" class="money-format-input form-control">
                                     <label class="form-label">Total amount</label>
                                 </div>
                                 @error('total_amount')
@@ -63,9 +73,12 @@
                                 @enderror
                             </div>
                             <div class="form-group form-float">
-                                <div class="form-line">
-                                    <input type="number" value="@yield('edit_sur_charge')" name="sur_charge" class="form-control">
-                                    <label class="form-label">Sur charge</label>
+                                <div class="input-group">
+                                    <div class="form-line">
+                                        <input type="number" value="{{ old('sur_charge', isset($edit_sur_charge) ? $edit_sur_charge : '') }}" name="sur_charge" class="form-control">
+                                        <label class="form-label">Sur charge</label>
+                                    </div>
+                                    <span class="input-group-addon">%</span>
                                 </div>
                                 @error('sur_charge')
                                     <label class="error" role="alert">
@@ -74,9 +87,12 @@
                                 @enderror
                             </div>
                             <div class="form-group form-float">
-                                <div class="form-line">
-                                    <input type="number" value="@yield('edit_dealer_commission')" name="dealer_commission" class="form-control">
-                                    <label class="form-label">Dealer commission</label>
+                                <div class="input-group">
+                                    <div class="form-line">
+                                        <input type="number" value="{{ old('dealer_commission', isset($edit_dealer_commission) ? $edit_dealer_commission : '') }}" name="dealer_commission" class="form-control">
+                                        <label class="form-label">Dealer commission</label>
+                                    </div>
+                                    <span class="input-group-addon">%</span>
                                 </div>
                                 @error('dealer_commission')
                                     <label class="error" role="alert">
@@ -93,4 +109,9 @@
         <!-- #END# Basic Validation -->
     </div>
 </section>
+@endsection
+
+
+@section('scripts')
+
 @endsection

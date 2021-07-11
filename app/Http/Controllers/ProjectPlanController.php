@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProjectPlanRequest;
 use App\Models\Project;
 use App\Models\ProjectPlan;
-use Illuminate\Http\Request;
 
 class ProjectPlanController extends Controller
 {
@@ -39,7 +38,9 @@ class ProjectPlanController extends Controller
      */
     public function store(ProjectPlanRequest $request)
     {
-        ProjectPlan::create($request->validated());
+        $data = $request->validated();
+        $data['total_amount'] = str_replace(',', '', $data['total_amount']);
+        ProjectPlan::create($data);
         return redirect()->route('project-plans.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
     }
 
@@ -75,7 +76,9 @@ class ProjectPlanController extends Controller
      */
     public function update(ProjectPlanRequest $request, ProjectPlan $projectPlan)
     {
-        $projectPlan->update($request->validated());
+        $data = $request->validated();
+        $data['total_amount'] = str_replace(',', '', $data['total_amount']);
+        $projectPlan->update($data);
         return redirect()->route('project-plans.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
     }
 

@@ -22,8 +22,8 @@ class CreateInstallmentsTable extends Migration
 
             $table->date('payment_date');
             $table->char('plenty', 4);
-            $table->decimal('amount_paid', 10, 2);
-            $table->decimal('remaining_amount', 10, 2);
+            $table->decimal('amount_paid', 20, 2);
+            $table->decimal('remaining_amount', 20, 2);
             $table->timestamps();
         });
     }

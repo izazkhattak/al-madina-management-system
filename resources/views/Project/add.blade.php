@@ -1,7 +1,7 @@
 @extends('layouts.app_main')
 
 @section('content')
-<section class="content">
+<section>
     <div class="container-fluid">
         <!-- Basic Validation -->
         <div class="row clearfix">
@@ -24,7 +24,7 @@
 	                        @show
                             <div class="form-group form-float">
                                 <div class="form-line">
-                                    <input type="text" value="@yield('editTitle')" class="form-control @error('title') is-invalid @enderror" name="title">
+                                    <input type="text" value="{{ old('title', isset($edit_title) ? $edit_title : '') }}" class="form-control @error('title') is-invalid @enderror" name="title">
                                     <label class="form-label">Title</label>
                                 </div>
                                 @error('title')
@@ -35,7 +35,7 @@
                             </div>
                             <div class="form-group form-float">
                                 <div class="form-line">
-                                    <textarea name="description" cols="30" rows="5" class="form-control @error('title') is-invalid @enderror no-resize">@yield('editDescription')</textarea>
+                                    <textarea name="description" cols="30" rows="5" class="form-control @error('title') is-invalid @enderror no-resize">{{ old('description', isset($edit_description) ? $edit_description : '') }}</textarea>
                                     <label class="form-label">Description</label>
                                 </div>
                                 @error('description')

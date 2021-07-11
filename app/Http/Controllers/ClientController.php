@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ClientRequest;
 use App\Models\Client;
 use App\Models\ProjectPlan;
-use Illuminate\Http\Request;
 
 class ClientController extends Controller
 {
@@ -39,7 +38,9 @@ class ClientController extends Controller
      */
     public function store(ClientRequest $request)
     {
-        Client::create($request->validated());
+        $data = $request->validated();
+        $data['down_payment'] = str_replace(',', '', $data['down_payment']);
+        Client::create($data);
         return redirect()->route('clients.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
     }
 
@@ -63,7 +64,9 @@ class ClientController extends Controller
     public function edit(Client $client)
     {
         $projectPlan  = ProjectPlan::all();
-        return view('Clients.edit', compact('client', 'projectPlan'));
+        $installmentStarted = ProjectPlan::find($client->project_plan_id)->installment;
+        $isEditableProjectPlan = $installmentStarted->count() > 0 ? 'no' : 'yes';
+        return view('Clients.edit', compact('client', 'projectPlan', 'isEditableProjectPlan'));
     }
 
     /**
@@ -75,7 +78,13 @@ class ClientController extends Controller
      */
     public function update(ClientRequest $request, Client $client)
     {
-        $client->update($request->validated());
+        $data = $request->validated();
+        $data['down_payment'] = str_replace(',', '', $data['down_payment']);
+
+        $installmentStarted = ProjectPlan::find($client->project_plan_id)->installment;
+        $data['project_plan_id'] = $installmentStarted->count() > 0 ? $client->project_plan_id : $data['project_plan_id'];
+
+        $client->update($data);
         return redirect()->route('clients.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
     }
 

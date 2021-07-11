@@ -2,29 +2,35 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class InstallmentRequest extends FormRequest
+class InstallmentRequest extends BaseFormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        return false;
-    }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
-    public function rules()
+    protected function storeRules()
     {
         return [
-            //
+            'client_id' => [
+                'required'
+            ],
+            'payment_date' => [
+                'required'
+            ],
+            'amount_paid' => [
+                'required'
+            ],
+            'remaining_amount' => [
+                'required'
+            ]
         ];
+    }
+
+    protected function updateRules()
+    {
+        $rules = $this->storeRules();
+
+        array_walk($rules, function(&$value, $key) {
+            array_unshift($value, 'sometimes');
+        });
+
+        return $rules;
     }
 }

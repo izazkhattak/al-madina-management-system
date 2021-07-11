@@ -23,8 +23,8 @@ class CreateClientsTable extends Migration
                 ->constrained()
                 ->onDelete('cascade');
 
-            $table->string('down_payment');
-            $table->date('due_date');
+            $table->decimal('down_payment', 20, 2)->nullable();
+            $table->date('due_date')->nullable();
             $table->timestamps();
         });
     }

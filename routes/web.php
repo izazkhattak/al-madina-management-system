@@ -32,8 +32,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', [ProjectController::class, 'index'])->name('home');
 
     Route::resource('projects', ProjectController::class);
-    Route::resource('project-plans', ProjectPlanController::class);
+    Route::resource('project-plans', ProjectPlanController::class)->except('edit');
     Route::resource('clients', ClientController::class);
     Route::resource('installments', InstallmentController::class);
-    Route::resource('reports', ReportController::class);
+    Route::resource('reports', ReportController::class)->only('index');
+
+    Route::prefix('reports')->as('reports.')->group(function () {
+        Route::get('/get-project-plans', [ReportController::class, 'getProjectPlans'])->name('get-project-plans');
+        Route::get('/get-clients', [ReportController::class, 'getClients'])->name('get-clients');
+        Route::get('/get-reports', [ReportController::class, 'getReports'])->name('get-reports');
+    });
 });

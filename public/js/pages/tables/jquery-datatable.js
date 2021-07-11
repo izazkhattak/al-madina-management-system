@@ -9,6 +9,14 @@ $(function () {
         responsive: true,
         buttons: [
             'copy', 'csv', 'excel', 'pdf', 'print'
-        ]
+        ],
+        ajax: {
+            type: 'get',
+            data: '',
+            url: '/reports/get-reports',
+            success: function(response) {
+
+            }
+        }
     });
 });

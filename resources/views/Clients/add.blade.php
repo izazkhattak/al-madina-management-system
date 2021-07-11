@@ -1,7 +1,7 @@
 @extends('layouts.app_main')
 
 @section('content')
-<section class="content">
+<section>
     <div class="container-fluid">
         <!-- Basic Validation -->
         <div class="row clearfix">
@@ -24,7 +24,7 @@
 	                        @show
                             <div class="form-group form-float">
                                 <div class="form-line">
-                                    <input type="text" value="@yield('edit_name')" name="name" class="form-control">
+                                    <input type="text" value="{{ old('name', isset($edit_name) ? $edit_name : '') }}" name="name" class="form-control">
                                     <label class="form-label">Name</label>
                                 </div>
                                 @error('name')
@@ -35,7 +35,7 @@
                             </div>
                             <div class="form-group form-float">
                                 <div class="form-line">
-                                    <input type="text" value="@yield('edit_phone')" name="phone" class="form-control">
+                                    <input type="text" value="{{ old('phone', isset($edit_phone) ? $edit_phone : '') }}" name="phone" class="phone-number form-control">
                                     <label class="form-label">Phone</label>
                                 </div>
                                 @error('phone')
@@ -46,7 +46,7 @@
                             </div>
                             <div class="form-group form-float">
                                 <div class="form-line">
-                                    <input type="text" value="@yield('edit_cnic')" name="cnic" class="form-control">
+                                    <input type="text" value="{{ old('cnic', isset($edit_cnic) ? $edit_cnic : '') }}" name="cnic" class="cnic-format form-control">
                                     <label class="form-label">CNIC</label>
                                 </div>
                                 @error('cnic')
@@ -57,11 +57,11 @@
                             </div>
                             <div class="form-group form-float">
                                 <div class="form-line">
-                                    <select name="project_plan_id" class="form-control" id="project_plan_id">
+                                    <select {{ isset($isEditableProjectPlan) && $isEditableProjectPlan == 'no' ? 'disabled' : '' }} name="project_plan_id" class="form-control" id="project_plan_id">
                                         <option value="">Please select a plan</option>
                                         @forelse ($projectPlan as $plan)
 
-                                        <option {{ isset($project_plan_id) && $project_plan_id == $plan->id ? 'selected' : '' }} value="{{ $plan->id }}">{{ $plan->total_amount }}</option>
+                                        <option {{ isset($project_plan_id) && $project_plan_id == $plan->id ? 'selected' : '' }} value="{{ $plan->id }}">{{ number_format($plan->total_amount, 2) }}</option>
 
                                         @empty
                                         @endforelse
@@ -75,7 +75,7 @@
                             </div>
                             <div class="form-group form-float">
                                 <div class="form-line">
-                                    <input type="number" value="@yield('edit_down_payment')" name="down_payment" class="form-control">
+                                    <input type="text" value="{{ old('down_payment', isset($edit_down_payment) ? number_format($edit_down_payment, 2) : '') }}" name="down_payment" class="money-format-input form-control">
                                     <label class="form-label">Down payment</label>
                                 </div>
                                 @error('down_payment')
@@ -85,9 +85,9 @@
                                 @enderror
                             </div>
                             <div class="form-group form-float">
-                                <div class="form-line">
-                                    <input type="date" value="@yield('edit_due_date')" name="due_date" class="form-control">
-                                    <label class="form-label">Down payment</label>
+                                <div class="form-line" id="bs_datepicker_container">
+                                    <input type="text" readonly value="{{ old('due_date', isset($edit_due_date) ? $edit_due_date : '') }}" name="due_date" class="form-control">
+                                    <label class="form-label">Due Date</label>
                                 </div>
                                 @error('due_date')
                                     <label class="error" role="alert">
@@ -104,4 +104,30 @@
         <!-- #END# Basic Validation -->
     </div>
 </section>
+@endsection
+
+
+@section('scripts')
+    <!-- Bootstrap Datepicker Plugin Js -->
+    <script src="{{ asset('plugins/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
+
+    <!-- Jquery Spinner Plugin Js -->
+    <script src="{{ asset('plugins/jquery-spinner/js/jquery.spinner.js') }}"></script>
+
+    <!-- Input Mask Plugin Js -->
+    <script src="{{ asset('plugins/jquery-inputmask/jquery.inputmask.bundle.js') }}"></script>
+
+    <script defer>
+        var $demoMaskedInput = $('body');
+        //Dollar Money
+        $demoMaskedInput.find('.cnic-format').inputmask('99999-9999999-9', { placeholder: '_____-_______-_' });
+        //Phone Number
+        $demoMaskedInput.find('.phone-number').inputmask('+99 (999) 999-99-99', { placeholder: '+__ (___) ___-__-__' });
+        //Bootstrap datepicker plugin
+        $('#bs_datepicker_container input').datepicker({
+            autoclose: true,
+            container: '#bs_datepicker_container',
+            format: 'yyyy-mm-dd'
+        });
+    </script>
 @endsection

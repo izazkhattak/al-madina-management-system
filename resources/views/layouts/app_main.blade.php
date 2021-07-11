@@ -22,6 +22,12 @@
     <!-- JQuery DataTable Css -->
     <link href="{{ asset('plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css') }}" rel="stylesheet">
     <!-- Custom Css -->
+
+    <!-- Bootstrap Select Css -->
+    <link href="{{ asset('plugins/bootstrap-select/css/bootstrap-select.css') }}" rel="stylesheet" />
+
+    @yield('styles')
+
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="{{ asset('css/themes/all-themes.css') }}" rel="stylesheet" />
@@ -34,7 +40,16 @@
         @include('included.sidebar')
 
         <main class="py-4">
-            @yield('content')
+            <section class="content">
+                @if (session('status'))
+                    <div class="container-fluid">
+                        <div class="system-alerts-messages alert alert-{{ session('status') }}">
+                            <strong>{{ session('status') != 'success' ? 'Failed' : 'Success' }}!</strong> {{ session('message') }}
+                        </div>
+                    </div>
+                @endif
+                @yield('content')
+            </section>
         </main>
 
         <!-- Page Loader -->
@@ -57,6 +72,14 @@
         @include('included.footer')
         @yield('scripts')
         @yield('auth-scripts')
+
+        <script>
+            $(document).ready(function() {
+                setTimeout(() => {
+                    $('.system-alerts-messages').fadeOut(100);
+                }, 5 * 1000)
+            });
+        </script>
 
     </div>
 </body>

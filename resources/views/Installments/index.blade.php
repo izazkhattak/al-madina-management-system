@@ -9,11 +9,11 @@
                 <div class="card">
                     <div class="header">
                         <h2>
-                            Projects
+                            Installments
                         </h2>
                         <ul class="header-dropdown m-t--5">
                             <li>
-                                <a href="{{ route('projects.create') }}" type="button" class="btn bg-indigo waves-effect">Add New</a>
+                                <a href="{{ route('installments.create') }}" type="button" class="btn bg-indigo waves-effect">Add New</a>
                             </li>
                         </ul>
                     </div>
@@ -23,36 +23,45 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Title</th>
-                                        <th>Description</th>
-                                        <th>Created at</th>
+                                        <th>Client</th>
+                                        <th>Payment date</th>
+                                        <th>Plenty</th>
+                                        <th>Amount paid</th>
+                                        <th>Remaining amount</th>
+                                        <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
                                         <th>ID</th>
-                                        <th>Title</th>
-                                        <th>Description</th>
-                                        <th>Created at</th>
+                                        <th>Client</th>
+                                        <th>Payment date</th>
+                                        <th>Plenty</th>
+                                        <th>Amount paid</th>
+                                        <th>Remaining amount</th>
+                                        <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
-                                    @forelse ($projects as $project)
-                                    {{-- onclick="{{ 'window.location.href='.'"'.route('projects.show', $project->id).'"' }}" --}}
+                                    @forelse ($installments as $item)
+                                    {{-- onclick="{{ 'window.location.href='.'"'.route('installments.show', $item->id).'"' }}" --}}
                                         <tr>
-                                            <td>{{ $project->id }}</td>
-                                            <td>{{ $project->title }}</td>
-                                            <td>{{ $project->description }}</td>
-                                            <td>{{ $project->created_at->format('Y-m-d H:i') }}</td>
+                                            <td>{{ $item->id }}</td>
+                                            <td>{{ $item->client->name }}</td>
+                                            <td>{{ $item->payment_date }}</td>
+                                            <td>{{ $item->plenty }}</td>
+                                            <td>{{ number_format($item->amount_paid, 2) }}</td>
+                                            <td>{{ number_format($item->remaining_amount, 2) }}</td>
+                                            <td>{{ $item->created_at }}</td>
                                             <td>
-                                                <a class="btn padding-0 btn-circle" href="{{ route('projects.edit', $project->id) }}">
+                                                <a class="btn padding-0 btn-circle" href="{{ route('installments.edit', $item->id) }}">
                                                     <button type="button" class="btn bg-green btn-circle waves-effect waves-circle waves-float">
                                                         <i class="material-icons">mode_edit</i>
                                                     </button>
                                                 </a>
-                                                <form class="btn padding-0 btn-circle" action="{{ route('projects.destroy', $project->id) }}" method="POST">
+                                                <form class="btn padding-0 btn-circle" action="{{ route('installments.destroy', $item->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn bg-pink btn-circle waves-effect waves-circle waves-float">

@@ -14,7 +14,7 @@ class AlterTableClientsAddMonthlyInstallmentsColumn extends Migration
     public function up()
     {
         Schema::table('clients', function (Blueprint $table) {
-            $table->decimal('monthly_installments', 10, 2)->nullable()->after('due_date');
+            $table->decimal('monthly_installments', 20, 2)->nullable()->after('due_date');
         });
     }
 
