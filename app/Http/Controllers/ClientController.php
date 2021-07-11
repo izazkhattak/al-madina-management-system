@@ -40,6 +40,17 @@ class ClientController extends Controller
     {
         $data = $request->validated();
         $data['down_payment'] = str_replace(',', '', $data['down_payment']);
+
+        $getProjectPlan = ProjectPlan::find($data['project_plan_id']);
+
+        $totalAmount = $getProjectPlan->total_amount;
+        $installmentYearMonths = $getProjectPlan->installment_years * 12;
+
+        // Calculated monthly installments;
+        $totalMonthyInstallmentsAmount = ($totalAmount - $data['down_payment']) / $installmentYearMonths;
+
+        $data['monthly_installments'] = $totalMonthyInstallmentsAmount;
+
         Client::create($data);
         return redirect()->route('clients.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
     }
@@ -52,6 +63,9 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
+        if (request()->ajax()) {
+            return response()->json(['success'=> true, 'data'=> $client]);
+        }
         return view('Clients.show', compact('client'));
     }
 

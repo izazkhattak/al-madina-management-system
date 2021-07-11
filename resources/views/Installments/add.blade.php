@@ -64,17 +64,6 @@
                                     </label>
                                 @enderror
                             </div>
-                            <div class="form-group form-float">
-                                <div class="form-line">
-                                    <input type="text" value="{{ old('remaining_amount', isset($edit_remaining_amount) ? number_format($edit_remaining_amount, 2) : '') }}" name="remaining_amount" class="money-format-input form-control">
-                                    <label class="form-label">Remaining amount</label>
-                                </div>
-                                @error('remaining_amount')
-                                    <label class="error" role="alert">
-                                        {{ $message }}
-                                    </label>
-                                @enderror
-                            </div>
                             <button class="btn btn-primary waves-effect" type="submit">SUBMIT</button>
                         </form>
                     </div>

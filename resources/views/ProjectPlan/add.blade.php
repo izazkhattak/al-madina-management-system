@@ -72,7 +72,7 @@
                             <div class="form-group form-float">
                                 <div class="input-group">
                                     <div class="form-line">
-                                        <input type="number" value="{{ old('sur_charge', isset($edit_sur_charge) ? $edit_sur_charge : '') }}" name="sur_charge" class="form-control">
+                                        <input type="number" min="0" max="100" value="{{ old('sur_charge', isset($edit_sur_charge) ? $edit_sur_charge : '') }}" name="sur_charge" class="form-control">
                                         <label class="form-label">Sur charge</label>
                                     </div>
                                     <span class="input-group-addon">%</span>
@@ -86,7 +86,7 @@
                             <div class="form-group form-float">
                                 <div class="input-group">
                                     <div class="form-line">
-                                        <input type="number" value="{{ old('dealer_commission', isset($edit_dealer_commission) ? $edit_dealer_commission : '') }}" name="dealer_commission" class="form-control">
+                                        <input type="number" min="0" max="100" value="{{ old('dealer_commission', isset($edit_dealer_commission) ? $edit_dealer_commission : '') }}" name="dealer_commission" class="form-control">
                                         <label class="form-label">Dealer commission</label>
                                     </div>
                                     <span class="input-group-addon">%</span>

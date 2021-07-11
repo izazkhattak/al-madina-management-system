@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\InstallmentRequest;
 use App\Models\Client;
 use App\Models\Installment;
+use App\Models\ProjectPlan;
 
 class InstallmentController extends Controller
 {
@@ -15,7 +16,7 @@ class InstallmentController extends Controller
      */
     public function index()
     {
-        $installments = Installment::all();
+        $installments = Installment::with('client.projectPlan')->get();
         return view('Installments.index', compact('installments'));
     }
 
@@ -39,17 +40,27 @@ class InstallmentController extends Controller
     public function store(InstallmentRequest $request)
     {
         $data = $request->validated();
-        $data['amount_paid'] = str_replace(',', '', $data['amount_paid']);
-        $data['remaining_amount'] = str_replace(',', '', $data['remaining_amount']);
+        $data['amount_paid'] = $amountPaid = str_replace(',', '', $data['amount_paid']);
 
-        $clientDueDate = Client::find($data['client_id'])->due_date;
+        $getClient = Client::find($data['client_id']);
+        $getProjectPlan = $getClient->projectPlan;
+        $clientDueDate = $getClient->due_date;
         $plenty = 'No';
 
         if ($data['payment_date'] > $clientDueDate) {
             $plenty = 'Yes';
+            // Applied Plenty to amount_paid field.
+            $surCharge = $getProjectPlan->sur_charge;
+            $amountPlenty = $amountPaid * ($surCharge / 100);
+            $data['amount_paid'] = $amountPaid + $amountPlenty;
         }
 
+        // Calculated Remaining amount
+        $totalAmount = $getProjectPlan->total_amount;
+        $data['remaining_amount'] = $totalAmount - $amountPaid;
+
         $data['plenty'] = $plenty;
+
         Installment::create($data);
         return redirect()->route('installments.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
     }
@@ -87,15 +98,24 @@ class InstallmentController extends Controller
     public function update(InstallmentRequest $request, Installment $installment)
     {
         $data = $request->validated();
-        $data['amount_paid'] = str_replace(',', '', $data['amount_paid']);
-        $data['remaining_amount'] = str_replace(',', '', $data['remaining_amount']);
+        $data['amount_paid'] = $amountPaid = str_replace(',', '', $data['amount_paid']);
 
-        $clientDueDate = Client::find($data['client_id'])->due_date;
+        $getClient = Client::find($data['client_id']);
+        $getProjectPlan = $getClient->projectPlan;
+        $clientDueDate = $getClient->due_date;
         $plenty = 'No';
 
         if ($data['payment_date'] > $clientDueDate) {
             $plenty = 'Yes';
+            // Applied Plenty to amount_paid field.
+            $surCharge = $getProjectPlan->sur_charge;
+            $amountPlenty = $amountPaid * ($surCharge / 100);
+            $data['amount_paid'] = $amountPaid - $amountPlenty;
         }
+
+        // Calculated Remaining amount
+        $totalAmount = $getProjectPlan->total_amount;
+        $data['remaining_amount'] = $totalAmount - $amountPaid;
 
         $data['plenty'] = $plenty;
 

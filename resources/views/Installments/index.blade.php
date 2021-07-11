@@ -28,6 +28,7 @@
                                         <th>Plenty</th>
                                         <th>Amount paid</th>
                                         <th>Remaining amount</th>
+                                        <th>Dealer commission</th>
                                         <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
@@ -40,6 +41,7 @@
                                         <th>Plenty</th>
                                         <th>Amount paid</th>
                                         <th>Remaining amount</th>
+                                        <th>Dealer commission</th>
                                         <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
@@ -54,6 +56,7 @@
                                             <td>{{ $item->plenty }}</td>
                                             <td>{{ number_format($item->amount_paid, 2) }}</td>
                                             <td>{{ number_format($item->remaining_amount, 2) }}</td>
+                                            <td>{{ $item->client->projectPlan->dealer_commission }}%</td>
                                             <td>{{ $item->created_at }}</td>
                                             <td>
                                                 <a class="btn padding-0 btn-circle" href="{{ route('installments.edit', $item->id) }}">

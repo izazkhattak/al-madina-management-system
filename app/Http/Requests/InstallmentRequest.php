@@ -16,9 +16,6 @@ class InstallmentRequest extends BaseFormRequest
             ],
             'amount_paid' => [
                 'required'
-            ],
-            'remaining_amount' => [
-                'required'
             ]
         ];
     }
