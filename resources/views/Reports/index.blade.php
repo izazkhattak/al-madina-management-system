@@ -92,8 +92,6 @@
 <script type="application/javascript" src="{{ asset('plugins/jquery-datatable/extensions/export/buttons.html5.min.js') }}" defer></script>
 <script type="application/javascript" src="{{ asset('plugins/jquery-datatable/extensions/export/buttons.print.min.js') }}" defer></script>
 
-{{-- <script type="application/javascript" src="{{ asset('js/pages/tables/jquery-datatable.js') }}" defer></script> --}}
-
 <script defer>
     $(document).ready(() => {
         $(document).on('change', '#project_id', function() {
@@ -141,25 +139,6 @@
             $('.table-reports-main table').DataTable().ajax.reload();
             $('.table-reports-main table').css('width', '100%');
             $('.table-reports-main').removeClass('hidden');
-            // $.ajax({
-            //     type: 'GET',
-            //     url: "{{ route('reports.get-reports') }}",
-            //     data: {
-            //         project_id: $('#project_id').val(),
-            //         project_plan_id: $('#project_plan_id').val(),
-            //         client_id: $(this).val()
-            //     },
-            //     success: function(response) {
-            //         if (response.success) {
-            //             $('.table-reports-main').removeClass('hidden');
-            //             $('.table-reports-main table tbody').html(response.html);
-            //             $('.table-reports-main table').DataTable().ajax().reload();
-            //         }
-            //     },
-            //     error: function(error) {
-            //         alert('Something went wrong, please try again!')
-            //     }
-            // })
         });
 
         //Exportable table
