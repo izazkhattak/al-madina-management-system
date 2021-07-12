@@ -17,4 +17,8 @@ class Report extends Model
         'out_stand',
         'sur_charge',
     ];
+
+    public function client() {
+        return $this->belongsTo(Client::class);
+    }
 }

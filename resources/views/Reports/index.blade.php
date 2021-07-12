@@ -182,7 +182,7 @@
                 { "data": "due_date" },
                 { "data": "paid" },
                 { "data": "paid_on" },
-                { "data": "installment_id" },
+                { "data": "ds_dd_on" },
                 { "data": "out_stand" },
                 { "data": "sur_charge" }
             ]

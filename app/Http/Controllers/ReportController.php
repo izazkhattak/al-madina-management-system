@@ -117,6 +117,10 @@ class ReportController extends Controller
 
         return DataTables::of(Report::where(['client_id'=> $clientID, 'project_id'=> $projectID]))
                     ->addIndexColumn()
+                    ->addColumn('ds_dd_on', function ($row) {
+                        $name = $row->client->cnic . "/" . $row->client->name;
+                        return $name;
+                    })
                     ->make(true);
 
         // return response()->json(array_merge($request->toArray(), ['recordsTotal' => count($reports), 'recordsFiltered' => count($reports), 'success'=> true, 'data'=> $reports]));
