@@ -24,11 +24,14 @@ class CreateReportsTable extends Migration
                 ->constrained()
                 ->onDelete('cascade');
 
+            $table->foreignId('installment_id')->nullable()
+                ->constrained()
+                ->onDelete('cascade');
+
             $table->decimal('due_amount', 20, 2);
             $table->date('due_date');
             $table->decimal('paid', 20, 2);
             $table->date('paid_on');
-            $table->integer('ds_dd_no');
             $table->integer('out_stand');
             $table->decimal('sur_charge', 20, 2);
 

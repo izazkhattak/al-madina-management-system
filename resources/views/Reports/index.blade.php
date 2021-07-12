@@ -1,5 +1,23 @@
 ﻿@extends('layouts.app_main')
 
+@section('styles')
+    <style>
+        .dataTables_processing {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            height: 50px;
+            width: 200px;
+            background-color: rgb(255 255 255 / 90%);
+            padding: 15px 60px;
+            white-space: nowrap;
+        }
+    </style>
+@endsection
+
 @section('content')
 <section>
     <div class="container-fluid">
@@ -48,7 +66,7 @@
                                         <th>Paid</th>
                                         <th>Paid On</th>
                                         <th>DS/DD No.</th>
-                                        <th>Out/Stand</th>
+                                        <th>Remaining Amount</th>
                                         <th>Surcharge</th>
                                     </tr>
                                 </thead>
@@ -60,7 +78,7 @@
                                         <th>Paid</th>
                                         <th>Paid On</th>
                                         <th>DS/DD No.</th>
-                                        <th>Out/Stand</th>
+                                        <th>Remaining Amount</th>
                                         <th>Surcharge</th>
                                     </tr>
                                 </tfoot>
@@ -136,7 +154,10 @@
         });
 
         $(document).on('change', '#client_id', function() {
-            $('.table-reports-main table').DataTable().ajax.reload();
+            let project_id = $('#project_id').val();
+            let project_plan_id = $('#project_plan_id').val();
+            let client_id = $("#client_id").val();
+            $('.table-reports-main table').DataTable().ajax.url("{{ route('reports.get-reports') }}?project_id=" + project_id + "&client_id=" + client_id).load();
             $('.table-reports-main table').css('width', '100%');
             $('.table-reports-main').removeClass('hidden');
         });
@@ -150,16 +171,10 @@
             ],
             "serverSide": true,
             "processing": true,
+            "pageLength": 5,
             "ajax": {
                 type: 'GET',
-                url: "{{ route('reports.get-reports') }}",
-                data: function() {
-                    return {
-                        project_id: $('#project_id').val(),
-                        project_plan_id: $('#project_plan_id').val(),
-                        client_id: $("#client_id").val()
-                    }
-                }
+                url: "{{ route('reports.get-reports') }}"
             },
             "columns": [
                 { "data": "id" },
@@ -167,7 +182,7 @@
                 { "data": "due_date" },
                 { "data": "paid" },
                 { "data": "paid_on" },
-                { "data": "ds_dd_no" },
+                { "data": "installment_id" },
                 { "data": "out_stand" },
                 { "data": "sur_charge" }
             ]

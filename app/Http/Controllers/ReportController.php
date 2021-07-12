@@ -7,6 +7,7 @@ use App\Models\Project;
 use App\Models\ProjectPlan;
 use App\Models\Report;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class ReportController extends Controller
 {
@@ -90,8 +91,7 @@ class ReportController extends Controller
     public function getProjectPlans(Request $request) {
         $projectID = $request->input('project_id');
         $projectPlans = ProjectPlan::where('project_id', $projectID)->get();
-        // $html = '<option value="">Please select</option>';
-        $html = '';
+        $html = '<option value="">Please select a plan</option>';
         foreach ($projectPlans as $item) {
             $html .= "<option value='$item->id'>" . number_format($item->total_amount, 2) . "</option>";
         }
@@ -102,7 +102,7 @@ class ReportController extends Controller
     public function getClients(Request $request) {
         $projectPlanID = $request->input('project_plan_id');
         $clients = Client::where('project_plan_id', $projectPlanID)->get();
-        $html = '';
+        $html = '<option value="">Please select a Client</option>';
         foreach ($clients as $item) {
             $html .= "<option value='$item->id'>$item->name</option>";
         }
@@ -110,13 +110,16 @@ class ReportController extends Controller
     }
 
     public function getReports(Request $request) {
+        // return $request;
         $clientID = $request->input('client_id');
         $projectID = $request->input('project_id');
         $projectPlanID = $request->input('project_plan_id');
 
-        $reports = Report::where(['client_id'=> $clientID, 'project_id'=> $projectID])->get();
+        return DataTables::of(Report::where(['client_id'=> $clientID, 'project_id'=> $projectID]))
+                    ->addIndexColumn()
+                    ->make(true);
 
-        return response()->json(['success'=> true, 'data'=> $reports]);
+        // return response()->json(array_merge($request->toArray(), ['recordsTotal' => count($reports), 'recordsFiltered' => count($reports), 'success'=> true, 'data'=> $reports]));
 
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ReportEvent;
 use App\Http\Requests\InstallmentRequest;
 use App\Models\Client;
 use App\Models\Installment;
@@ -45,10 +46,9 @@ class InstallmentController extends Controller
         $getClient = Client::find($data['client_id']);
         $getProjectPlan = $getClient->projectPlan;
         $clientDueDate = $getClient->due_date;
-        $plenty = 'No';
+        $amountPlenty = '0';
 
         if ($data['payment_date'] > $clientDueDate) {
-            $plenty = 'Yes';
             // Applied Plenty to amount_paid field.
             $surCharge = $getProjectPlan->sur_charge;
             $amountPlenty = $amountPaid * ($surCharge / 100);
@@ -56,12 +56,19 @@ class InstallmentController extends Controller
         }
 
         // Calculated Remaining amount
+        $getTotalPaidAmountByClient = Installment::where('client_id', $data['client_id'])->sum('amount_paid');
+
+        // Substract Plenty Amount from previous tatal amount paid by client.
+        $getTotalPlentyAmount = Installment::where('client_id', $data['client_id'])->sum('plenty');
+        $getTotalPaidAmountByClient = $getTotalPaidAmountByClient - $getTotalPlentyAmount;
+
         $totalAmount = $getProjectPlan->total_amount;
-        $data['remaining_amount'] = $totalAmount - $amountPaid;
+        $data['remaining_amount'] = $totalAmount - $getTotalPaidAmountByClient - $amountPaid;
 
-        $data['plenty'] = $plenty;
+        $data['plenty'] = $amountPlenty;
 
-        Installment::create($data);
+        $installment = Installment::create($data);
+        ReportEvent::dispatch($installment);
         return redirect()->route('installments.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
     }
 
@@ -103,23 +110,30 @@ class InstallmentController extends Controller
         $getClient = Client::find($data['client_id']);
         $getProjectPlan = $getClient->projectPlan;
         $clientDueDate = $getClient->due_date;
-        $plenty = 'No';
+        $amountPlenty = '0';
 
         if ($data['payment_date'] > $clientDueDate) {
-            $plenty = 'Yes';
             // Applied Plenty to amount_paid field.
             $surCharge = $getProjectPlan->sur_charge;
             $amountPlenty = $amountPaid * ($surCharge / 100);
-            $data['amount_paid'] = $amountPaid - $amountPlenty;
+            $data['amount_paid'] = $amountPaid + $amountPlenty;
         }
 
         // Calculated Remaining amount
-        $totalAmount = $getProjectPlan->total_amount;
-        $data['remaining_amount'] = $totalAmount - $amountPaid;
+        $getTotalPaidAmountByClient = $installment->where('client_id', $data['client_id'])->sum('amount_paid');
 
-        $data['plenty'] = $plenty;
+        // Substract Plenty Amount from previous tatal amount paid by client.
+        $getTotalPlentyAmount = $installment->where('client_id', $data['client_id'])->sum('plenty');
+        $getTotalPaidAmountByClient = $getTotalPaidAmountByClient - $getTotalPlentyAmount;
+
+        $totalAmount = $getProjectPlan->total_amount;
+        $data['remaining_amount'] = $totalAmount - $getTotalPaidAmountByClient - $amountPaid;
+
+        $data['plenty'] = $amountPlenty;
 
         $installment->update($data);
+        $installment->is_updated = 'yes';
+        ReportEvent::dispatch($installment);
         return redirect()->route('installments.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
     }
 

@@ -44,16 +44,6 @@
             </ul>
         </div>
         <!-- #Menu -->
-        <!-- Footer -->
-        <div class="legal">
-            <div class="copyright">
-                &copy; 2021 - {{ date('Y') }} <a href="javascript:void(0);">{{ config('app.name') }}</a>.
-            </div>
-            <div class="version">
-                <b>Version: </b> 1.1
-            </div>
-        </div>
-        <!-- #Footer -->
     </aside>
     <!-- #END# Left Sidebar -->
 </section>

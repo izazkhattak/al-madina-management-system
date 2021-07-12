@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ config('app.name') }}</title>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
@@ -52,27 +52,33 @@
                     </div>
                 @endif
                 @yield('content')
-            </section>
-        </main>
-
-        <!-- Page Loader -->
-        <div class="page-loader-wrapper">
-            <div class="loader">
-                <div class="preloader">
-                    <div class="spinner-layer pl-red">
-                        <div class="circle-clipper left">
-                            <div class="circle"></div>
-                        </div>
-                        <div class="circle-clipper right">
-                            <div class="circle"></div>
-                        </div>
+                <!-- Footer -->
+                <div class="legal">
+                    <div class="copyright text-right m-r-15 m-l-15 p-b-15">
+                        &copy; 2021 - {{ date('Y') }} <a href="https://fixitsol.com/">fixitsol</a>.
                     </div>
                 </div>
-                <p>Please wait...</p>
+                <!-- #Footer -->
+            </section>
+            <!-- Page Loader -->
+            <div class="page-loader-wrapper">
+                <div class="loader">
+                    <div class="preloader">
+                        <div class="spinner-layer pl-red">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Please wait...</p>
+                </div>
             </div>
-        </div>
-        <!-- #END# Page Loader -->
-        @include('included.footer')
+            <!-- #END# Page Loader -->
+            @include('included.footer')
+        </main>
         @yield('scripts')
         @yield('auth-scripts')
 
