@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProjectPlanRequest;
 use App\Models\Project;
 use App\Models\ProjectPlan;
+use Yajra\DataTables\Facades\DataTables;
 
 class ProjectPlanController extends Controller
 {
@@ -15,8 +16,49 @@ class ProjectPlanController extends Controller
      */
     public function index()
     {
-        $plans = ProjectPlan::all();
-        return view('ProjectPlan.index', compact('plans'));
+        if (request()->ajax()) {
+            return DataTables::of(ProjectPlan::with('project'))
+                    ->addIndexColumn()
+                    ->addColumn('created_at', function($item) {
+                        return $item->created_at != null ? $item->created_at->format('Y-m-d H:i') : '';
+                    })
+                    ->addColumn('title', function($item) {
+                        return $item->project->title;
+                    })
+                    ->addColumn('total_amount', function($item) {
+                        return number_format($item->total_amount, 2);
+                    })
+                    ->addColumn('sur_charge', function($item) {
+                        return $item->sur_charge . '%';
+                    })
+                    ->addColumn('dealer_commission', function($item) {
+                        return $item->dealer_commission . '%';
+                    })
+                    ->addColumn('installment_years', function($item) {
+                        return $item->installment_years . 'Year\'s';
+                    })
+                    ->addColumn('actions', function($item) {
+                        // Allow route for edit then add below for editing purpose.
+                        // <a class="btn padding-0 btn-circle" href="'.route('project-plans.edit', $item->id).'">
+                        //         <button type="button" class="btn bg-green btn-circle waves-effect waves-circle waves-float">
+                        //             <i class="material-icons">mode_edit</i>
+                        //         </button>
+                        // </a>
+                        return '
+                            <form class="btn padding-0 btn-circle" action="'.route('project-plans.destroy', $item->id).'" method="POST">
+                                <input type="hidden" name="_method" value="delete" />
+                                <input type="hidden" name="_token" value="'. csrf_token() .'">
+                                <button type="submit" class="btn bg-pink btn-circle waves-effect waves-circle waves-float" data-type="form-confirm">
+                                    <i class="material-icons">delete_forever</i>
+                                </button>
+                            </form>
+                        ';
+                    })
+                    ->rawColumns(['actions'])
+                    ->make(true);
+        }
+
+        return view('ProjectPlan.index');
     }
 
     /**

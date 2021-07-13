@@ -19,7 +19,7 @@
                     </div>
                     <div class="body">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                            <table class="table table-striped table-hover js-basic-example dataTable">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -47,36 +47,7 @@
                                     </tr>
                                 </tfoot>
                                 <tbody>
-                                    @forelse ($installments as $item)
-                                    {{-- onclick="{{ 'window.location.href='.'"'.route('installments.show', $item->id).'"' }}" --}}
-                                        <tr>
-                                            <td>{{ $item->id }}</td>
-                                            <td>{{ $item->client->name }}</td>
-                                            <td>{{ $item->payment_date }}</td>
-                                            <td>{{ $item->plenty }}</td>
-                                            <td>{{ number_format($item->amount_paid, 2) }}</td>
-                                            <td>{{ number_format($item->remaining_amount, 2) }}</td>
-                                            <td>{{ $item->client->projectPlan->dealer_commission }}%</td>
-                                            <td>{{ $item->created_at }}</td>
-                                            <td>
-                                                <a class="btn padding-0 btn-circle" href="{{ route('installments.edit', $item->id) }}">
-                                                    <button type="button" class="btn bg-green btn-circle waves-effect waves-circle waves-float">
-                                                        <i class="material-icons">mode_edit</i>
-                                                    </button>
-                                                </a>
-                                                <form class="btn padding-0 btn-circle" action="{{ route('installments.destroy', $item->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn bg-pink btn-circle waves-effect waves-circle waves-float" data-type="form-confirm">
-                                                        <i class="material-icons">delete_forever</i>
-                                                    </button>
-                                                </form>
-                                            </td>
-                                        </tr>
 
-                                    @empty
-
-                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
@@ -92,8 +63,30 @@
 
 @section('scripts')
 {{-- <!-- Jquery DataTable Plugin Js --> --}}
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/jquery.dataTables.js') }}" defer></script>
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js') }}" defer></script>
-<script type="application/javascript" src="{{ asset('js/pages/tables/jquery-datatable.js') }}" defer></script>
+<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/jquery.dataTables.js') }}"></script>
+<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js') }}"></script>
+<script type="application/javascript">
+    $('.js-basic-example').DataTable({
+            dom: 'Bfrtip',
+            responsive: true,
+            "serverSide": true,
+            "processing": true,
+            "pageLength": 25,
+            "ajax": {
+                type: 'GET'
+            },
+            "columns": [
+                { "data": "id" },
+                { "data": "name" },
+                { "data": "payment_date" },
+                { "data": "plenty" },
+                { "data": "amount_paid" },
+                { "data": "remaining_amount" },
+                { "data": "dealer_commission" },
+                { "data": "created_at" },
+                { "data": "actions", searchable: "true", "orderable": false }
+            ]
+        });
+</script>
 @endsection
 

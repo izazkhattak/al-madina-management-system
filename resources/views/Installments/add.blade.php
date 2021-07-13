@@ -29,7 +29,7 @@
                                         <option value="">Please select a client</option>
                                         @forelse ($clients as $client)
 
-                                        <option {{ isset($client_id) && $client_id == $client->id ? 'selected' : '' }} value="{{ $client->id }}">{{ $client->cnic }}</option>
+                                        <option {{ isset($client_id) && $client_id == $client->id ? 'selected' : '' }} value="{{ $client->id }}">{{ $client->name.' / '.$client->cnic }}</option>
 
                                         @empty
                                         @endforelse

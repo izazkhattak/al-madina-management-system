@@ -19,7 +19,7 @@
                     </div>
                     <div class="body">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                            <table class="table table-striped table-hover js-basic-example dataTable">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -45,36 +45,6 @@
                                     </tr>
                                 </tfoot>
                                 <tbody>
-                                    @forelse ($plans as $plan)
-                                    {{-- onclick="{{ 'window.location.href='.'"'.route('project-plans.show', $plan->id).'"' }}" --}}
-                                        <tr>
-                                            <td>{{ $plan->id }}</td>
-                                            <td>{{ $plan->project->title }}</td>
-                                            <td>{{ $plan->installment_years }} Year's</td>
-                                            <td>{{ number_format($plan->total_amount, 2) }}</td>
-                                            <td>{{ $plan->sur_charge }}%</td>
-                                            <td>{{ $plan->dealer_commission }}%</td>
-                                            <td>{{ $plan->created_at }}</td>
-                                            <td>
-                                                {{-- To activate editing, remove except method from resourse route --}}
-                                                {{-- <a class="btn padding-0 btn-circle" href="{{ route('project-plans.edit', $plan->id) }}">
-                                                    <button type="button" class="btn bg-green btn-circle waves-effect waves-circle waves-float">
-                                                        <i class="material-icons">mode_edit</i>
-                                                    </button>
-                                                </a> --}}
-                                                <form class="btn padding-0 btn-circle" action="{{ route('project-plans.destroy', $plan->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn bg-pink btn-circle waves-effect waves-circle waves-float" data-type="form-confirm">
-                                                        <i class="material-icons">delete_forever</i>
-                                                    </button>
-                                                </form>
-                                            </td>
-                                        </tr>
-
-                                    @empty
-
-                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
@@ -90,8 +60,29 @@
 
 @section('scripts')
 {{-- <!-- Jquery DataTable Plugin Js --> --}}
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/jquery.dataTables.js') }}" defer></script>
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js') }}" defer></script>
-<script type="application/javascript" src="{{ asset('js/pages/tables/jquery-datatable.js') }}" defer></script>
+<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/jquery.dataTables.js') }}"></script>
+<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js') }}"></script>
+<script type="application/javascript">
+    $('.js-basic-example').DataTable({
+            dom: 'Bfrtip',
+            responsive: true,
+            "serverSide": true,
+            "processing": true,
+            "pageLength": 25,
+            "ajax": {
+                type: 'GET'
+            },
+            "columns": [
+                { "data": "id" },
+                { "data": "title" },
+                { "data": "installment_years" },
+                { "data": "total_amount" },
+                { "data": "sur_charge" },
+                { "data": "dealer_commission" },
+                { "data": "created_at" },
+                { "data": "actions", searchable: "true", "orderable": false }
+            ]
+        });
+</script>
 @endsection
 

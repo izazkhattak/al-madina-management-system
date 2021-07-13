@@ -57,11 +57,11 @@
                             </div>
                             <div class="form-group form-float">
                                 <div class="form-line">
-                                    <select {{ isset($isEditableProjectPlan) && $isEditableProjectPlan == 'no' ? 'disabled' : '' }} name="project_plan_id" class="form-control" id="project_plan_id">
+                                    <select {{ isset($isEditableProjectPlan) && $isEditableProjectPlan == 'no' ? 'disabled' : '' }} name="project_plan_id" class="form-control" id="project_plan_id" data-live-search="true">
                                         <option value="">Please select a plan</option>
                                         @forelse ($projectPlan as $plan)
 
-                                        <option {{ isset($project_plan_id) && $project_plan_id == $plan->id ? 'selected' : '' }} value="{{ $plan->id }}">{{ number_format($plan->total_amount, 2) }}</option>
+                                        <option {{ isset($project_plan_id) && $project_plan_id == $plan->id ? 'selected' : '' }} value="{{ $plan->id }}">{{ $plan->project->title . ' - ' . number_format($plan->total_amount, 2) }}</option>
 
                                         @empty
                                         @endforelse

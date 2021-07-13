@@ -84,6 +84,11 @@
 
         <script>
             $(document).ready(function() {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
                 setTimeout(() => {
                     $('.system-alerts-messages').fadeOut(100);
                 }, 5 * 1000);

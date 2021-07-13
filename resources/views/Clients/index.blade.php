@@ -19,7 +19,7 @@
                     </div>
                     <div class="body">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                            <table class="table table-striped table-hover js-basic-example dataTable">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -49,37 +49,7 @@
                                     </tr>
                                 </tfoot>
                                 <tbody>
-                                    @forelse ($plans as $plan)
-                                    {{-- onclick="{{ 'window.location.href='.'"'.route('clients.show', $plan->id).'"' }}" --}}
-                                        <tr>
-                                            <td>{{ $plan->id }}</td>
-                                            <td>{{ $plan->name }}</td>
-                                            <td>{{ $plan->phone }}</td>
-                                            <td>{{ $plan->cnic }}</td>
-                                            <td>{{ number_format($plan->projectPlan->total_amount, 2) }}</td>
-                                            <td>{{ number_format($plan->down_payment, 2) }}</td>
-                                            <td>{{ $plan->due_date }}</td>
-                                            <td>{{ $plan->monthly_installments }}</td>
-                                            <td>{{ $plan->created_at }}</td>
-                                            <td>
-                                                <a class="btn padding-0 btn-circle" href="{{ route('clients.edit', $plan->id) }}">
-                                                    <button type="button" class="btn bg-green btn-circle waves-effect waves-circle waves-float">
-                                                        <i class="material-icons">mode_edit</i>
-                                                    </button>
-                                                </a>
-                                                <form class="btn padding-0 btn-circle" action="{{ route('clients.destroy', $plan->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn bg-pink btn-circle waves-effect waves-circle waves-float" data-type="form-confirm">
-                                                        <i class="material-icons">delete_forever</i>
-                                                    </button>
-                                                </form>
-                                            </td>
-                                        </tr>
 
-                                    @empty
-
-                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
@@ -95,8 +65,31 @@
 
 @section('scripts')
 {{-- <!-- Jquery DataTable Plugin Js --> --}}
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/jquery.dataTables.js') }}" defer></script>
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js') }}" defer></script>
-<script type="application/javascript" src="{{ asset('js/pages/tables/jquery-datatable.js') }}" defer></script>
+<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/jquery.dataTables.js') }}"></script>
+<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js') }}"></script>
+<script type="application/javascript">
+    $('.js-basic-example').DataTable({
+            dom: 'Bfrtip',
+            responsive: true,
+            "serverSide": true,
+            "processing": true,
+            "pageLength": 25,
+            "ajax": {
+                type: 'GET'
+            },
+            "columns": [
+                { "data": "id" },
+                { "data": "name" },
+                { "data": "phone" },
+                { "data": "cnic" },
+                { "data": "total_amount" },
+                { "data": "down_payment" },
+                { "data": "due_date" },
+                { "data": "monthly_installments" },
+                { "data": "created_at" },
+                { "data": "actions", searchable: "true", "orderable": false }
+            ]
+        });
+</script>
 @endsection
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ClientRequest;
 use App\Models\Client;
 use App\Models\ProjectPlan;
+use Yajra\DataTables\Facades\DataTables;
 
 class ClientController extends Controller
 {
@@ -15,8 +16,39 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $plans = Client::all();
-        return view('Clients.index', compact('plans'));
+        if (request()->ajax()) {
+            return DataTables::of(Client::all())
+                    ->addIndexColumn()
+                    ->addColumn('total_amount', function($item) {
+                        return number_format($item->projectPlan->total_amount, 2);
+                    })
+                    ->addColumn('total_amount', function($item) {
+                        return number_format($item->down_payment, 2);
+                    })
+                    ->addColumn('created_at', function($item) {
+                        return $item->created_at != null ? $item->created_at->format('Y-m-d H:i') : '';
+                    })
+                    ->addColumn('actions', function($item) {
+                        return '
+                            <a class="btn padding-0 btn-circle" href="'.route('clients.edit', $item->id).'">
+                                <button type="button" class="btn bg-green btn-circle waves-effect waves-circle waves-float">
+                                    <i class="material-icons">mode_edit</i>
+                                </button>
+                            </a>
+                            <form class="btn padding-0 btn-circle" action="'.route('clients.destroy', $item->id).'" method="POST">
+                                <input type="hidden" name="_method" value="delete" />
+                                <input type="hidden" name="_token" value="'. csrf_token() .'">
+                                <button type="submit" class="btn bg-pink btn-circle waves-effect waves-circle waves-float" data-type="form-confirm">
+                                    <i class="material-icons">delete_forever</i>
+                                </button>
+                            </form>
+                        ';
+                    })
+                    ->rawColumns(['actions'])
+                    ->make(true);
+        }
+
+        return view('Clients.index');
     }
 
     /**
@@ -26,7 +58,7 @@ class ClientController extends Controller
      */
     public function create()
     {
-        $projectPlan  = ProjectPlan::all();
+        $projectPlan  = ProjectPlan::with('project')->get();
         return view('Clients.add', compact('projectPlan'));
     }
 

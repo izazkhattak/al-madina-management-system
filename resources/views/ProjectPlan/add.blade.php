@@ -31,7 +31,7 @@
 	                        @show
                             <div class="form-group form-float">
                                 <div class="form-line">
-                                    <select name="project_id" class="form-control" id="project_id">
+                                    <select name="project_id" class="form-control" id="project_id" data-live-search="true">
                                         <option value="">Please select a project</option>
                                         @forelse ($projects as $project)
 

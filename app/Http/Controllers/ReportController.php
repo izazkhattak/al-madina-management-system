@@ -93,7 +93,7 @@ class ReportController extends Controller
         $projectPlans = ProjectPlan::where('project_id', $projectID)->get();
         $html = '<option value="">Please select a plan</option>';
         foreach ($projectPlans as $item) {
-            $html .= "<option value='$item->id'>" . number_format($item->total_amount, 2) . "</option>";
+            $html .= "<option value='$item->id'>" . $item->installment_years . " Year's - " . number_format($item->total_amount, 2) . "</option>";
         }
         return response()->json(['success'=> true, 'html'=> $html]);
     }
@@ -104,7 +104,7 @@ class ReportController extends Controller
         $clients = Client::where('project_plan_id', $projectPlanID)->get();
         $html = '<option value="">Please select a Client</option>';
         foreach ($clients as $item) {
-            $html .= "<option value='$item->id'>$item->name</option>";
+            $html .= "<option value='$item->id'>$item->name / $item->cnic</option>";
         }
         return response()->json(['success'=> true, 'html'=> $html]);
     }
@@ -117,13 +117,10 @@ class ReportController extends Controller
 
         return DataTables::of(Report::where(['client_id'=> $clientID, 'project_id'=> $projectID]))
                     ->addIndexColumn()
-                    ->addColumn('ds_dd_on', function ($row) {
+                    ->addColumn('name', function ($row) {
                         $name = $row->client->cnic . "/" . $row->client->name;
                         return $name;
                     })
                     ->make(true);
-
-        // return response()->json(array_merge($request->toArray(), ['recordsTotal' => count($reports), 'recordsFiltered' => count($reports), 'success'=> true, 'data'=> $reports]));
-
     }
 }

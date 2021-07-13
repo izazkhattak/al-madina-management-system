@@ -19,7 +19,7 @@
                     </div>
                     <div class="body">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover js-basic-example dataTable">
+                            <table class="table table-striped table-hover js-basic-example dataTable">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -39,32 +39,6 @@
                                     </tr>
                                 </tfoot>
                                 <tbody>
-                                    @forelse ($projects as $project)
-                                    {{-- onclick="{{ 'window.location.href='.'"'.route('projects.show', $project->id).'"' }}" --}}
-                                        <tr>
-                                            <td>{{ $project->id }}</td>
-                                            <td>{{ $project->title }}</td>
-                                            <td>{{ $project->description }}</td>
-                                            <td>{{ $project->created_at->format('Y-m-d H:i') }}</td>
-                                            <td>
-                                                <a class="btn padding-0 btn-circle" href="{{ route('projects.edit', $project->id) }}">
-                                                    <button type="button" class="btn bg-green btn-circle waves-effect waves-circle waves-float">
-                                                        <i class="material-icons">mode_edit</i>
-                                                    </button>
-                                                </a>
-                                                <form class="btn padding-0 btn-circle" action="{{ route('projects.destroy', $project->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn bg-pink btn-circle waves-effect waves-circle waves-float" data-type="form-confirm">
-                                                        <i class="material-icons">delete_forever</i>
-                                                    </button>
-                                                </form>
-                                            </td>
-                                        </tr>
-
-                                    @empty
-
-                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
@@ -80,8 +54,26 @@
 
 @section('scripts')
 {{-- <!-- Jquery DataTable Plugin Js --> --}}
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/jquery.dataTables.js') }}" defer></script>
-<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js') }}" defer></script>
-<script type="application/javascript" src="{{ asset('js/pages/tables/jquery-datatable.js') }}" defer></script>
+<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/jquery.dataTables.js') }}"></script>
+<script type="application/javascript" src="{{ asset('plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js') }}"></script>
+<script type="application/javascript">
+    $('.js-basic-example').DataTable({
+            dom: 'Bfrtip',
+            responsive: true,
+            "serverSide": true,
+            "processing": true,
+            "pageLength": 25,
+            "ajax": {
+                type: 'GET'
+            },
+            "columns": [
+                { "data": "id" },
+                { "data": "title" },
+                { "data": "description" },
+                { "data": "created_at" },
+                { "data": "actions", searchable: "true", "orderable": false }
+            ]
+        });
+</script>
 @endsection
 

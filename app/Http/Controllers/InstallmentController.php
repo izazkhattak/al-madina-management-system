@@ -7,6 +7,7 @@ use App\Http\Requests\InstallmentRequest;
 use App\Models\Client;
 use App\Models\Installment;
 use App\Models\ProjectPlan;
+use Yajra\DataTables\Facades\DataTables;
 
 class InstallmentController extends Controller
 {
@@ -17,8 +18,45 @@ class InstallmentController extends Controller
      */
     public function index()
     {
-        $installments = Installment::with('client.projectPlan')->get();
-        return view('Installments.index', compact('installments'));
+        if (request()->ajax()) {
+            return DataTables::of(Installment::with('client.projectPlan'))
+                    ->addIndexColumn()
+                    ->addColumn('created_at', function($item) {
+                        return $item->created_at != null ? $item->created_at->format('Y-m-d H:i') : '';
+                    })
+                    ->addColumn('name', function($item) {
+                        return $item->client->name;
+                    })
+                    ->addColumn('amount_paid', function($item) {
+                        return number_format($item->amount_paid, 2);
+                    })
+                    ->addColumn('remaining_amount', function($item) {
+                        return number_format($item->remaining_amount, 2);
+                    })
+                    ->addColumn('dealer_commission', function($item) {
+                        return $item->plenty > 0 ? number_format(($item->amount_paid - $item->plenty) * ( $item->client->projectPlan->dealer_commission / 100 ), 2) : 0;
+                    })
+                    ->addColumn('actions', function($item) {
+                        return '
+                            <a class="btn padding-0 btn-circle" href="'.route('installments.edit', $item->id).'">
+                                <button type="button" class="btn bg-green btn-circle waves-effect waves-circle waves-float">
+                                    <i class="material-icons">mode_edit</i>
+                                </button>
+                            </a>
+                            <form class="btn padding-0 btn-circle" action="'.route('installments.destroy', $item->id).'" method="POST">
+                                <input type="hidden" name="_method" value="delete" />
+                                <input type="hidden" name="_token" value="'. csrf_token() .'">
+                                <button type="submit" class="btn bg-pink btn-circle waves-effect waves-circle waves-float" data-type="form-confirm">
+                                    <i class="material-icons">delete_forever</i>
+                                </button>
+                            </form>
+                        ';
+                    })
+                    ->rawColumns(['actions'])
+                    ->make(true);
+        }
+
+        return view('Installments.index');
     }
 
     /**
@@ -62,7 +100,7 @@ class InstallmentController extends Controller
         $getTotalPlentyAmount = Installment::where('client_id', $data['client_id'])->sum('plenty');
         $getTotalPaidAmountByClient = $getTotalPaidAmountByClient - $getTotalPlentyAmount;
 
-        $totalAmount = $getProjectPlan->total_amount;
+        $totalAmount = $getProjectPlan->total_amount - $getClient->down_payment;
         $data['remaining_amount'] = $totalAmount - $getTotalPaidAmountByClient - $amountPaid;
 
         $data['plenty'] = $amountPlenty;

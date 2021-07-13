@@ -1,23 +1,5 @@
 ﻿@extends('layouts.app_main')
 
-@section('styles')
-    <style>
-        .dataTables_processing {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            margin: auto;
-            height: 50px;
-            width: 200px;
-            background-color: rgb(255 255 255 / 90%);
-            padding: 15px 60px;
-            white-space: nowrap;
-        }
-    </style>
-@endsection
-
 @section('content')
 <section>
     <div class="container-fluid">
@@ -33,7 +15,7 @@
                     <div class="body">
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                <select name="project_id" class="form-control" id="project_id">
+                                <select name="project_id" class="form-control" id="project_id" data-live-search="true">
                                     <option value="">Please select a project</option>
                                     @forelse ($projects as $project)
 
@@ -46,40 +28,35 @@
                         </div>
                         <div class="row hidden">
                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                <select name="project_plan_id" class="form-control" id="project_plan_id">
+                                <select name="project_plan_id" class="form-control" id="project_plan_id" data-live-search="true">
                                 </select>
                             </div>
                         </div>
                         <div class="row hidden">
                             <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-                                <select name="client_id" class="form-control" id="client_id">
+                                <select name="client_id" class="form-control" id="client_id" data-live-search="true">
                                 </select>
                             </div>
                         </div>
                         <div class="table-responsive p-t-10 table-reports-main hidden">
-                            <table class="table table-bordered table-striped table-hover js-exportable dataTable">
+                            <table class="table table-striped table-hover js-exportable dataTable">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <th>Name</th>
                                         <th>Due Amount</th>
                                         <th>Due Date</th>
                                         <th>Paid</th>
                                         <th>Paid On</th>
-                                        <th>DS/DD No.</th>
                                         <th>Remaining Amount</th>
                                         <th>Surcharge</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>ID</th>
-                                        <th>Due Amount</th>
-                                        <th>Due Date</th>
-                                        <th>Paid</th>
-                                        <th>Paid On</th>
-                                        <th>DS/DD No.</th>
-                                        <th>Remaining Amount</th>
-                                        <th>Surcharge</th>
+                                        <th colspan="3" style="text-align:right">Total Paid:</th>
+                                        <th></th>
+                                        <th colspan="2" style="text-align:right">Sur Charge:</th>
+                                        <th></th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
@@ -171,21 +148,60 @@
             ],
             "serverSide": true,
             "processing": true,
-            "pageLength": 5,
+            "pageLength": 25,
             "ajax": {
                 type: 'GET',
                 url: "{{ route('reports.get-reports') }}"
             },
             "columns": [
-                { "data": "id" },
+                { "data": "name" },
                 { "data": "due_amount" },
                 { "data": "due_date" },
                 { "data": "paid" },
                 { "data": "paid_on" },
-                { "data": "ds_dd_on" },
                 { "data": "out_stand" },
                 { "data": "sur_charge" }
-            ]
+            ],
+            "footerCallback": function ( row, data, start, end, display ) {
+                var api = this.api(), data;
+
+                // Remove the formatting to get integer data for summation
+                var intVal = function ( i ) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '')*1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+
+                // Total over this page
+                let pageTotal = api
+                    .column( 3, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+
+                // Update footer
+                $( api.column( 3 ).footer() ).html(
+                    pageTotal
+                );
+
+                //******************************////
+                //******Sur Charge Calculation****************///
+                //******************************////
+                // Total over this page
+                let pageTotalSurchange = api
+                    .column( 6, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+
+                // Update footer
+                $( api.column( 6 ).footer() ).html(
+                    pageTotalSurchange
+                );
+            }
         });
     });
 </script>

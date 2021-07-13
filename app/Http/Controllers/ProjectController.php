@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProjectRequest;
 use App\Models\Project;
+use Yajra\DataTables\Facades\DataTables;
 
 class ProjectController extends Controller
 {
@@ -14,8 +15,33 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::all();
-        return view('Project.index', compact('projects'));
+        if (request()->ajax()) {
+            return DataTables::of(Project::all())
+                    ->addIndexColumn()
+                    ->addColumn('created_at', function($item) {
+                        return $item->created_at != null ? $item->created_at->format('Y-m-d H:i') : '';
+                    })
+                    ->addColumn('actions', function($item) {
+                        return '
+                            <a class="btn padding-0 btn-circle" href="'.route('projects.edit', $item->id).'">
+                                <button type="button" class="btn bg-green btn-circle waves-effect waves-circle waves-float">
+                                    <i class="material-icons">mode_edit</i>
+                                </button>
+                            </a>
+                            <form class="btn padding-0 btn-circle" action="'.route('projects.destroy', $item->id).'" method="POST">
+                                <input type="hidden" name="_method" value="delete" />
+                                <input type="hidden" name="_token" value="'. csrf_token() .'">
+                                <button type="submit" class="btn bg-pink btn-circle waves-effect waves-circle waves-float" data-type="form-confirm">
+                                    <i class="material-icons">delete_forever</i>
+                                </button>
+                            </form>
+                        ';
+                    })
+                    ->rawColumns(['actions'])
+                    ->make(true);
+        }
+
+        return view('Project.index');
     }
 
     /**
