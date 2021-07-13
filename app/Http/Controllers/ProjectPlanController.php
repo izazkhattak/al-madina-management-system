@@ -26,7 +26,7 @@ class ProjectPlanController extends Controller
                         return $item->project->title;
                     })
                     ->addColumn('total_amount', function($item) {
-                        return number_format($item->total_amount, 2);
+                        return number_format($item->total_amount);
                     })
                     ->addColumn('sur_charge', function($item) {
                         return $item->sur_charge . '%';
@@ -35,7 +35,7 @@ class ProjectPlanController extends Controller
                         return $item->dealer_commission . '%';
                     })
                     ->addColumn('installment_years', function($item) {
-                        return $item->installment_years . 'Year\'s';
+                        return $item->installment_years . ' Year\'s';
                     })
                     ->addColumn('actions', function($item) {
                         // Allow route for edit then add below for editing purpose.

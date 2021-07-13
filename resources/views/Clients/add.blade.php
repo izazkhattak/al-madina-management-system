@@ -61,7 +61,7 @@
                                         <option value="">Please select a plan</option>
                                         @forelse ($projectPlan as $plan)
 
-                                        <option {{ isset($project_plan_id) && $project_plan_id == $plan->id ? 'selected' : '' }} value="{{ $plan->id }}">{{ $plan->project->title . ' - ' . number_format($plan->total_amount, 2) }}</option>
+                                        <option {{ isset($project_plan_id) && $project_plan_id == $plan->id ? 'selected' : '' }} value="{{ $plan->id }}">{{ $plan->project->title . ' - ' . $plan->installment_years . ' Years - ' . number_format($plan->total_amount, 2) }}</option>
 
                                         @empty
                                         @endforelse

@@ -55,7 +55,7 @@
                 <!-- Footer -->
                 <div class="legal">
                     <div class="copyright text-right m-r-15 m-l-15 p-b-15">
-                        &copy; 2021 - {{ date('Y') }} <a href="https://fixitsol.com/">fixitsol</a>.
+                        &copy; 2021 - {{ date('Y') }} <a href="https://fixitsol.com/">fixitsol</a>
                     </div>
                 </div>
                 <!-- #Footer -->

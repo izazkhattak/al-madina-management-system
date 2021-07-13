@@ -74,8 +74,8 @@
             },
             "columns": [
                 { "data": "id" },
-                { "data": "title" },
-                { "data": "installment_years" },
+                { "data": "title","name": 'project.title' },
+                { "data": "installment_years"},
                 { "data": "total_amount" },
                 { "data": "sur_charge" },
                 { "data": "dealer_commission" },

@@ -93,7 +93,7 @@ class ReportController extends Controller
         $projectPlans = ProjectPlan::where('project_id', $projectID)->get();
         $html = '<option value="">Please select a plan</option>';
         foreach ($projectPlans as $item) {
-            $html .= "<option value='$item->id'>" . $item->installment_years . " Year's - " . number_format($item->total_amount, 2) . "</option>";
+            $html .= "<option value='$item->id'>" . $item->installment_years . " Year's - " . number_format($item->total_amount) . "</option>";
         }
         return response()->json(['success'=> true, 'html'=> $html]);
     }
@@ -120,6 +120,22 @@ class ReportController extends Controller
                     ->addColumn('name', function ($row) {
                         $name = $row->client->cnic . "/" . $row->client->name;
                         return $name;
+                    })
+                     ->addColumn('due_amount', function ($row) {
+                        
+                        return number_format($row->due_amount);
+                    })
+                      ->addColumn('out_stand', function ($row) {
+                        
+                        return number_format($row->out_stand);
+                    })
+                      ->addColumn('paid', function ($row) {
+                        
+                        return number_format($row->paid);
+                    })
+                      ->addColumn('sur_charge', function ($row) {
+                        
+                        return number_format($row->sur_charge);
                     })
                     ->make(true);
     }

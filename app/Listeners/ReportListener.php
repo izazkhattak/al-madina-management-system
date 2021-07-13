@@ -33,7 +33,7 @@ class ReportListener
             'client_id' => $installment->client->id,
             'project_id' => $installment->client->projectPlan->project->id,
             'installment_id' => $installment->id,
-            'due_amount' => $installment->client->down_payment,
+            'due_amount' => $installment->client->monthly_installments,
             'due_date' => $installment->client->due_date,
             'paid' => $installment->amount_paid,
             'paid_on' => $installment->payment_date,

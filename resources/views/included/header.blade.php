@@ -31,8 +31,7 @@
                         <i class="material-icons">more_vert</i>
                     </a>
                     <ul class="dropdown-menu pull-right">
-                        <li><a href="javascript:void(0);" class=" waves-effect waves-block">Profile</a></li>
-                        <li><a href="javascript:void(0);" class=" waves-effect waves-block">Setting</a></li>
+                        
                         <li role="separator" class="divider"></li>
                         <li><a href="javascript:void(0);" onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();" class=" waves-effect waves-block">Logout</a></li>

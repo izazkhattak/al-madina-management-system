@@ -26,6 +26,7 @@
                                         <th>Name</th>
                                         <th>Phone</th>
                                         <th>CNIC</th>
+                                        <th>Project</th>
                                         <th>Project plan</th>
                                         <th>Down payment</th>
                                         <th>Due date</th>
@@ -40,6 +41,7 @@
                                         <th>Name</th>
                                         <th>Phone</th>
                                         <th>CNIC</th>
+                                        <th>Project</th>
                                         <th>Project plan</th>
                                         <th>Down payment</th>
                                         <th>Due date</th>
@@ -78,15 +80,16 @@
                 type: 'GET'
             },
             "columns": [
-                { "data": "id" },
+                { "data": "id", visible:false },
                 { "data": "name" },
                 { "data": "phone" },
                 { "data": "cnic" },
+                { "data": "project" },
                 { "data": "total_amount" },
-                { "data": "down_payment" },
-                { "data": "due_date" },
+                { "data": "down_payment"},
+                { "data": "due_date"},
                 { "data": "monthly_installments" },
-                { "data": "created_at" },
+                { "data": "created_at", visible:false  },
                 { "data": "actions", searchable: "true", "orderable": false }
             ]
         });

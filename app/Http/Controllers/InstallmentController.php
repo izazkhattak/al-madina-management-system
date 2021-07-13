@@ -24,17 +24,20 @@ class InstallmentController extends Controller
                     ->addColumn('created_at', function($item) {
                         return $item->created_at != null ? $item->created_at->format('Y-m-d H:i') : '';
                     })
+                    ->addColumn('project', function($item) {
+                        return $item->client->projectPlan->project->title.' - '.$item->client->projectPlan->installment_years. ' Years';
+                    })
                     ->addColumn('name', function($item) {
                         return $item->client->name;
                     })
                     ->addColumn('amount_paid', function($item) {
-                        return number_format($item->amount_paid, 2);
+                        return number_format($item->amount_paid);
                     })
                     ->addColumn('remaining_amount', function($item) {
-                        return number_format($item->remaining_amount, 2);
+                        return number_format($item->remaining_amount);
                     })
                     ->addColumn('dealer_commission', function($item) {
-                        return $item->plenty > 0 ? number_format(($item->amount_paid - $item->plenty) * ( $item->client->projectPlan->dealer_commission / 100 ), 2) : 0;
+                        return $item->plenty > 0 ? number_format(($item->amount_paid - $item->plenty) * ( $item->client->projectPlan->dealer_commission / 100 )) : 0;
                     })
                     ->addColumn('actions', function($item) {
                         return '
@@ -84,9 +87,19 @@ class InstallmentController extends Controller
         $getClient = Client::find($data['client_id']);
         $getProjectPlan = $getClient->projectPlan;
         $clientDueDate = $getClient->due_date;
+        $todaydate = $data['payment_date'];
+        $todayday = date("d",strtotime($todaydate));;
+        $todaymonth = date("m",strtotime($todaydate));
+        $todayYear = date("Y",strtotime($todaydate));
+        $clientDueday = date("d",strtotime($clientDueDate));;
+        $clientDuemonth = date("m",strtotime($clientDueDate));
+        $clientDueYear = date("Y",strtotime($clientDueDate));
+
+
+
         $amountPlenty = '0';
 
-        if ($data['payment_date'] > $clientDueDate) {
+        if ($todayday > $clientDueday && $todaymonth == $clientDuemonth && $todayYear == $clientDueYear) {
             // Applied Plenty to amount_paid field.
             $surCharge = $getProjectPlan->sur_charge;
             $amountPlenty = $amountPaid * ($surCharge / 100);

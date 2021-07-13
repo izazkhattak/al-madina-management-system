@@ -23,6 +23,7 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Project</th>
                                         <th>Client</th>
                                         <th>Payment date</th>
                                         <th>Plenty</th>
@@ -36,6 +37,7 @@
                                 <tfoot>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Project</th>
                                         <th>Client</th>
                                         <th>Payment date</th>
                                         <th>Plenty</th>
@@ -76,14 +78,15 @@
                 type: 'GET'
             },
             "columns": [
-                { "data": "id" },
+                { "data": "id", },
+                { "data": "project"},
                 { "data": "name" },
                 { "data": "payment_date" },
                 { "data": "plenty" },
                 { "data": "amount_paid" },
                 { "data": "remaining_amount" },
                 { "data": "dealer_commission" },
-                { "data": "created_at" },
+                { "data": "created_at" , visible:false },
                 { "data": "actions", searchable: "true", "orderable": false }
             ]
         });

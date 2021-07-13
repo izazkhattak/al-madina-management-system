@@ -19,11 +19,14 @@ class ClientController extends Controller
         if (request()->ajax()) {
             return DataTables::of(Client::all())
                     ->addIndexColumn()
-                    ->addColumn('total_amount', function($item) {
-                        return number_format($item->projectPlan->total_amount, 2);
+                    ->addColumn('project', function($item) {
+                        return $item->projectPlan->project->title;
                     })
                     ->addColumn('total_amount', function($item) {
-                        return number_format($item->down_payment, 2);
+                        return number_format($item->projectPlan->total_amount) . ' - ' .$item->projectPlan->installment_years.' Years';
+                    })
+                    ->addColumn('down_payment', function($item) {
+                        return number_format($item->down_payment);
                     })
                     ->addColumn('created_at', function($item) {
                         return $item->created_at != null ? $item->created_at->format('Y-m-d H:i') : '';

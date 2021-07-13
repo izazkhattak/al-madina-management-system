@@ -19,9 +19,10 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 
 </head>
-<body class="theme-blue">
+<body class="theme-blue" style="    background-image: url(https://intellectualfarmhouses.com/wp-content/uploads/2021/07/design-your-house-exterior-elevation.jpg);
+}">
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+        <nav class="navbar navbar-expand-md navbar-dark  shadow-sm" style="background-color:#3490dc;">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name') }}
