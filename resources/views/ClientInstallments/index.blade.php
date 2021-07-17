@@ -84,7 +84,7 @@
             "columns": [
                 { "data": "id", },
                 { "data": "project"},
-                { "data": "name" },
+                { "data": "name" , name: 'client.name'},
                 { "data": "payment_date" },
                 { "data": "plenty" },
                 { "data": "amount_paid" },

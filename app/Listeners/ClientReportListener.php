@@ -34,7 +34,7 @@ class ClientReportListener
             'client_id' => $installment->client->id,
             'project_id' => $installment->client->projectPlan->project->id,
             'client_installment_id' => $installment->id,
-            'due_amount' => $installment->client->monthly_installments,
+            'due_amount' => $installment->client->total_amount,
             'due_date' => $installment->client->due_date,
             'paid' => $installment->amount_paid,
             'paid_on' => $installment->payment_date,

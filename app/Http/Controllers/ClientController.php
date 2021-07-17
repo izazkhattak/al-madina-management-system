@@ -195,7 +195,7 @@ class ClientController extends Controller
 
     public function downloadUnpaidClients()
     {
-        $fileName = 'clients.csv';
+        $fileName = 'unpaid-clients.csv';
         // Get Unpaid clients.
         // - which have no installments record.
         // - either which have no record for the current month.

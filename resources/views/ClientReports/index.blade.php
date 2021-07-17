@@ -43,16 +43,17 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        {{-- <th>Due Amount</th> --}}
                                         <th>Due Date</th>
                                         <th>Paid Amount</th>
                                         <th>Paid On</th>
                                         <th>Remaining Amount</th>
+                                        <th>Total Amount</th>
                                         <th>Surcharge</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
+                                        <th></th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -157,11 +158,11 @@
             },
             "columns": [
                 { "data": "name" },
-                // { "data": "due_amount" },
                 { "data": "due_date" },
                 { "data": "paid" },
                 { "data": "paid_on" },
                 { "data": "out_stand" },
+                { "data": "due_amount" },
                 { "data": "sur_charge" }
             ],
             "footerCallback": function ( row, data, start, end, display ) {
@@ -192,30 +193,30 @@
                 //******************************////
                 //******Total Remaning Calculation****************///
                 //******************************////
-                let pageTotalRemaining = api
-                    .column( 4, { page: 'current'} )
-                    .data()
-                    .reduce( function (a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0 );
+                // let pageTotalRemaining = api
+                //     .column( 4, { page: 'current'} )
+                //     .data()
+                //     .reduce( function (a, b) {
+                //         return intVal(a) + intVal(b);
+                //     }, 0 );
 
                 // Update footer
-                $( api.column( 4 ).footer() ).html(
-                    'Total Remaining: ' + pageTotalRemaining.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                );
+                // $( api.column( 4 ).footer() ).html(
+                //     'Total Remaining: ' + pageTotalRemaining.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                // );
 
                 //******************************////
                 //******Sur Charge Calculation****************///
                 //******************************////
                 let pageTotalSurchange = api
-                    .column( 5, { page: 'current'} )
+                    .column( 6, { page: 'current'} )
                     .data()
                     .reduce( function (a, b) {
                         return intVal(a) + intVal(b);
                     }, 0 );
 
                 // Update footer
-                $( api.column( 5 ).footer() ).html(
+                $( api.column( 6 ).footer() ).html(
                     'Sur Charge: ' + pageTotalSurchange.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 );
             }

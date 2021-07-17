@@ -82,7 +82,7 @@
             "columns": [
                 { "data": "id", },
                 { "data": "project"},
-                { "data": "name" },
+                { "data": "name", name: 'dealer.name'},
                 { "data": "payment_date" },
                 { "data": "amount_paid" },
                 { "data": "remaining_amount" },

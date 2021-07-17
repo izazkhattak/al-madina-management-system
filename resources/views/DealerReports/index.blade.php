@@ -43,10 +43,10 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        {{-- <th>Due Amount</th> --}}
                                         <th>Paid Amount</th>
                                         <th>Paid On</th>
                                         <th>Remaining Amount</th>
+                                        <th>Total Amount</th>
                                         <th>Cheque draft no</th>
                                     </tr>
                                 </thead>
@@ -154,11 +154,11 @@
                 url: "{{ route('dealer-reports.get-reports') }}"
             },
             "columns": [
-                { "data": "name" },
-                // { "data": "due_amount" },
+                { "data": "name" },                
                 { "data": "paid" },
                 { "data": "paid_on" },
                 { "data": "out_stand" },
+                { "data": "due_amount" },
                 { "data": "cheque_draft_no" }
             ],
             "footerCallback": function ( row, data, start, end, display ) {
@@ -200,9 +200,9 @@
                     }, 0 );
 
                 // Update footer
-                $( api.column( 3 ).footer() ).html(
-                    'Total Remaining: ' + pageTotalRemaining.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-                );
+                // $( api.column( 3 ).footer() ).html(
+                //     'Total Remaining: ' + pageTotalRemaining.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                // );
             }
         });
     });
