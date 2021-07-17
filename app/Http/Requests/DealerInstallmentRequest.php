@@ -2,33 +2,25 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class ClientRequest extends BaseFormRequest
+class DealerInstallmentRequest extends BaseFormRequest
 {
 
     protected function storeRules()
     {
         return [
-            'name' => [
+            'dealer_id' => [
                 'required'
             ],
-            'phone' => [
+            'payment_date' => [
                 'required'
             ],
-            'cnic' => [
+            'amount_paid' => [
                 'required'
             ],
-            'project_plan_id' => [
+            'payment_method' => [
                 'required'
             ],
-            'total_amount' => [
-                'required'
-            ],
-            'down_payment' => [
-                'required'
-            ],
-            'due_date' => [
+            'cheque_draft_no' => [
                 'required'
             ]
         ];

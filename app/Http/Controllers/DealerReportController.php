@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\Dealer;
 use App\Models\Project;
 use App\Models\ProjectPlan;
 use App\Models\DealerReport;
@@ -19,7 +20,7 @@ class DealerReportController extends Controller
     public function index()
     {
         $projects = Project::all();
-        return view('Reports.index', compact('projects'));
+        return view('DealerReports.index', compact('projects'));
     }
 
     /**
@@ -93,17 +94,17 @@ class DealerReportController extends Controller
         $projectPlans = ProjectPlan::where('project_id', $projectID)->get();
         $html = '<option value="">Please select a plan</option>';
         foreach ($projectPlans as $item) {
-            $html .= "<option value='$item->id'>" . $item->installment_years . " Year's - " . number_format($item->total_amount) . "</option>";
+            $html .= "<option value='$item->id'>" . $item->installment_years . " Year's" . "</option>";
         }
         return response()->json(['success'=> true, 'html'=> $html]);
     }
 
 
-    public function getClients(Request $request) {
+    public function getDealer(Request $request) {
         $projectPlanID = $request->input('project_plan_id');
-        $clients = Client::where('project_plan_id', $projectPlanID)->get();
-        $html = '<option value="">Please select a Client</option>';
-        foreach ($clients as $item) {
+        $dealer = Dealer::where('project_plan_id', $projectPlanID)->get();
+        $html = '<option value="">Please select a Dealer</option>';
+        foreach ($dealer as $item) {
             $html .= "<option value='$item->id'>$item->name / $item->cnic</option>";
         }
         return response()->json(['success'=> true, 'html'=> $html]);
@@ -111,14 +112,14 @@ class DealerReportController extends Controller
 
     public function getReports(Request $request) {
         // return $request;
-        $clientID = $request->input('client_id');
+        $dealerID = $request->input('dealer_id');
         $projectID = $request->input('project_id');
         $projectPlanID = $request->input('project_plan_id');
 
-        return DataTables::of(DealerReport::where(['client_id'=> $clientID, 'project_id'=> $projectID]))
+        return DataTables::of(DealerReport::where(['dealer_id'=> $dealerID, 'project_id'=> $projectID]))
                     ->addIndexColumn()
                     ->addColumn('name', function ($row) {
-                        $name = $row->client->cnic . "/" . $row->client->name;
+                        $name = $row->dealer->cnic . "/" . $row->dealer->name;
                         return $name;
                     })
                      ->addColumn('due_amount', function ($row) {
@@ -133,9 +134,9 @@ class DealerReportController extends Controller
 
                         return number_format($row->paid);
                     })
-                      ->addColumn('sur_charge', function ($row) {
+                      ->addColumn('cheque_draft_no', function ($row) {
 
-                        return number_format($row->sur_charge);
+                        return number_format($row->cheque_draft_no);
                     })
                     ->make(true);
     }

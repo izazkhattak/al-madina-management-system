@@ -2,11 +2,12 @@
 
 namespace App\Listeners;
 
-use App\Models\Report;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Models\ClientReport;
 
-class ReportListener
+// use Illuminate\Contracts\Queue\ShouldQueue;
+// use Illuminate\Queue\InteractsWithQueue;
+
+class ClientReportListener
 {
     /**
      * Create the event listener.
@@ -26,13 +27,13 @@ class ReportListener
      */
     public function handle($event)
     {
-        $installment = $event->installment;
+        $installment = $event->clientInstallment;
         $installment->load('client.projectPlan.project');
 
         $reportData = array(
             'client_id' => $installment->client->id,
             'project_id' => $installment->client->projectPlan->project->id,
-            'installment_id' => $installment->id,
+            'client_installment_id' => $installment->id,
             'due_amount' => $installment->client->monthly_installments,
             'due_date' => $installment->client->due_date,
             'paid' => $installment->amount_paid,
@@ -42,10 +43,10 @@ class ReportListener
         );
 
         // Insert Report data record.
-        if ($report = Report::where('installment_id', $installment->id)->first()) {
+        if ($report = ClientReport::where('client_installment_id', $installment->id)->first()) {
             $report->update($reportData);
         } else {
-            Report::create($reportData);
+            ClientReport::create($reportData);
         }
 
         return true;

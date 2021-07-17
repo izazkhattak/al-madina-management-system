@@ -29,7 +29,6 @@ class CreateDealerReportsTable extends Migration
                 ->onDelete('cascade');
 
             $table->decimal('due_amount', 20, 2);
-            $table->date('due_date');
             $table->decimal('paid', 20, 2);
             $table->date('paid_on');
             $table->integer('out_stand');

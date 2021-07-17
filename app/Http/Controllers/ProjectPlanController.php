@@ -25,9 +25,6 @@ class ProjectPlanController extends Controller
                     ->addColumn('title', function($item) {
                         return $item->project->title;
                     })
-                    ->addColumn('total_amount', function($item) {
-                        return number_format($item->total_amount);
-                    })
                     ->addColumn('sur_charge', function($item) {
                         return $item->sur_charge . '%';
                     })
@@ -81,7 +78,6 @@ class ProjectPlanController extends Controller
     public function store(ProjectPlanRequest $request)
     {
         $data = $request->validated();
-        $data['total_amount'] = str_replace(',', '', $data['total_amount']);
         ProjectPlan::create($data);
         return redirect()->route('project-plans.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
     }
@@ -119,7 +115,6 @@ class ProjectPlanController extends Controller
     public function update(ProjectPlanRequest $request, ProjectPlan $projectPlan)
     {
         $data = $request->validated();
-        $data['total_amount'] = str_replace(',', '', $data['total_amount']);
         $projectPlan->update($data);
         return redirect()->route('project-plans.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
     }

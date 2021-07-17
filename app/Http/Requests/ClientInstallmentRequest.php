@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
-class InstallmentRequest extends BaseFormRequest
+use Illuminate\Foundation\Http\FormRequest;
+
+class ClientInstallmentRequest extends BaseFormRequest
 {
 
     protected function storeRules()
@@ -15,6 +17,12 @@ class InstallmentRequest extends BaseFormRequest
                 'required'
             ],
             'amount_paid' => [
+                'required'
+            ],
+            'payment_method' => [
+                'required'
+            ],
+            'cheque_draft_no' => [
                 'required'
             ]
         ];

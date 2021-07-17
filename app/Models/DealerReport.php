@@ -9,7 +9,7 @@ class DealerReport extends Model
     protected $fillable = [
         'dealer_id',
         'project_id',
-        'installment_id',
+        'dealer_installment_id',
         'due_amount',
         'due_date',
         'paid',
@@ -18,7 +18,7 @@ class DealerReport extends Model
         'cheque_draft_no',
     ];
 
-    public function client() {
-        return $this->belongsTo(Client::class);
+    public function dealer() {
+        return $this->belongsTo(Dealer::class);
     }
 }

@@ -8,7 +8,7 @@
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="header">
-                        <h2>{{ isset($id) ? 'Update' : 'Add' }} Client</h2>
+                        <h2>{{ isset($id) ? 'Update' : 'Add' }} Dealer</h2>
                         <ul class="header-dropdown">
                             <li class="dropdown">
                                 <a href="javascript:void(0);" onclick="window.history.go(-1)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -18,7 +18,7 @@
                         </ul>
                     </div>
                     <div class="body">
-                        <form action="{{ isset($id) ? route('clients.update', $id) : route('clients.store') }}" method="POST">
+                        <form action="{{ isset($id) ? route('dealers.update', $id) : route('dealers.store') }}" method="POST">
                             @csrf
                             @section("editMethod")
 	                        @show
@@ -79,28 +79,6 @@
                                     <label class="form-label">Total amount</label>
                                 </div>
                                 @error('total_amount')
-                                    <label class="error" role="alert">
-                                        {{ $message }}
-                                    </label>
-                                @enderror
-                            </div>
-                            <div class="form-group form-float">
-                                <div class="form-line">
-                                    <input type="text" value="{{ old('down_payment', isset($edit_down_payment) ? number_format($edit_down_payment) : '') }}" name="down_payment" class="money-format-input form-control">
-                                    <label class="form-label">Down payment</label>
-                                </div>
-                                @error('down_payment')
-                                    <label class="error" role="alert">
-                                        {{ $message }}
-                                    </label>
-                                @enderror
-                            </div>
-                            <div class="form-group form-float">
-                                <div class="form-line" id="bs_datepicker_container">
-                                    <input type="text" readonly value="{{ old('due_date', isset($edit_due_date) ? $edit_due_date : '') }}" name="due_date" class="form-control">
-                                    <label class="form-label">Due Date</label>
-                                </div>
-                                @error('due_date')
                                     <label class="error" role="alert">
                                         {{ $message }}
                                     </label>

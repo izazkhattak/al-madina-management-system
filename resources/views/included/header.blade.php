@@ -28,11 +28,10 @@
                 <!-- #END# Tasks -->
                 <li class="pull-right">
                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        <i class="material-icons">more_vert</i>
+                        {{ auth()->user()->name }} <i class="material-icons">more_vert</i>
                     </a>
                     <ul class="dropdown-menu pull-right">
-                        
-                        <li role="separator" class="divider"></li>
+                        {{-- <li role="separator" class="divider"></li> --}}
                         <li><a href="javascript:void(0);" onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();" class=" waves-effect waves-block">Logout</a></li>
                     </ul>

@@ -2,11 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class ClientRequest extends BaseFormRequest
+class DealerRequest extends BaseFormRequest
 {
-
     protected function storeRules()
     {
         return [
@@ -23,12 +20,6 @@ class ClientRequest extends BaseFormRequest
                 'required'
             ],
             'total_amount' => [
-                'required'
-            ],
-            'down_payment' => [
-                'required'
-            ],
-            'due_date' => [
                 'required'
             ]
         ];

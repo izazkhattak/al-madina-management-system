@@ -5,6 +5,7 @@
 $edit_name = $client->name;
 $edit_phone = $client->phone;
 $edit_cnic = $client->cnic;
+$edit_total_amount = $client->total_amount;
 $edit_down_payment = $client->down_payment;
 $edit_due_date = $client->due_date;
 

@@ -9,11 +9,11 @@
                 <div class="card">
                     <div class="header">
                         <h2>
-                            Project Plans
+                            Dealer Installments
                         </h2>
                         <ul class="header-dropdown m-t--5">
                             <li>
-                                <a href="{{ route('project-plans.create') }}" type="button" class="btn bg-indigo waves-effect">Add New</a>
+                                <a href="{{ route('dealer-installments.create') }}" type="button" class="btn bg-indigo waves-effect">Add New</a>
                             </li>
                         </ul>
                     </div>
@@ -24,9 +24,13 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Project</th>
-                                        <th>Installment Year</th>
-                                        <th>Sur-Charge</th>
-                                        <th>Dealer Commission</th>
+                                        <th>Dealer</th>
+                                        <th>Payment date</th>
+                                        <th>Amount paid</th>
+                                        <th>Remaining amount</th>
+                                        <th>Paymnent Method</th>
+                                        <th>Cheque Draft No.</th>
+                                        {{-- <th>Dealer commission</th> --}}
                                         <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
@@ -35,14 +39,19 @@
                                     <tr>
                                         <th>ID</th>
                                         <th>Project</th>
-                                        <th>Installment Year</th>
-                                        <th>Sur-Charge</th>
-                                        <th>Dealer Commission</th>
+                                        <th>Dealer</th>
+                                        <th>Payment date</th>
+                                        <th>Amount paid</th>
+                                        <th>Remaining amount</th>
+                                        <th>Paymnent Method</th>
+                                        <th>Cheque Draft No.</th>
+                                        {{-- <th>Dealer commission</th> --}}
                                         <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
+
                                 </tbody>
                             </table>
                         </div>
@@ -71,12 +80,16 @@
                 type: 'GET'
             },
             "columns": [
-                { "data": "id" },
-                { "data": "title","name": 'project.title' },
-                { "data": "installment_years"},
-                { "data": "sur_charge" },
-                { "data": "dealer_commission" },
-                { "data": "created_at" },
+                { "data": "id", },
+                { "data": "project"},
+                { "data": "name" },
+                { "data": "payment_date" },
+                { "data": "amount_paid" },
+                { "data": "remaining_amount" },
+                { "data": "payment_method" },
+                { "data": "cheque_draft_no" },
+                // { "data": "dealer_commission" },
+                { "data": "created_at" , visible:false },
                 { "data": "actions", searchable: "true", "orderable": false }
             ]
         });

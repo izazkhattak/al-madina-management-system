@@ -11,6 +11,7 @@ class Client extends Model
         'phone',
         'cnic',
         'project_plan_id',
+        'total_amount',
         'down_payment',
         'due_date',
         'monthly_installments'
@@ -18,5 +19,9 @@ class Client extends Model
 
     public function projectPlan() {
         return $this->belongsTo(ProjectPlan::class);
+    }
+
+    public function clientInstallments() {
+        return $this->hasMany(ClientInstallment::class, 'client_id');
     }
 }

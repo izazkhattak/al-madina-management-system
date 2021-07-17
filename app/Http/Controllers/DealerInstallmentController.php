@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ReportEvent;
-use App\Http\Requests\InstallmentRequest;
-use App\Models\Client;
+use App\Events\DealerReportEvent;
+use App\Http\Requests\DealerInstallmentRequest;
+use App\Models\Dealer;
 use App\Models\DealerInstallment;
-use App\Models\ProjectPlan;
 use Yajra\DataTables\Facades\DataTables;
 
 class DealerInstallmentController extends Controller
@@ -19,16 +18,16 @@ class DealerInstallmentController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            return DataTables::of(DealerInstallment::with('client.projectPlan'))
+            return DataTables::of(DealerInstallment::with('dealer.projectPlan'))
                     ->addIndexColumn()
                     ->addColumn('created_at', function($item) {
                         return $item->created_at != null ? $item->created_at->format('Y-m-d H:i') : '';
                     })
                     ->addColumn('project', function($item) {
-                        return $item->client->projectPlan->project->title.' - '.$item->client->projectPlan->installment_years. ' Years';
+                        return $item->dealer->projectPlan->project->title.' - '.$item->dealer->projectPlan->installment_years. ' Years';
                     })
                     ->addColumn('name', function($item) {
-                        return $item->client->name;
+                        return $item->dealer->name;
                     })
                     ->addColumn('amount_paid', function($item) {
                         return number_format($item->amount_paid);
@@ -36,17 +35,20 @@ class DealerInstallmentController extends Controller
                     ->addColumn('remaining_amount', function($item) {
                         return number_format($item->remaining_amount);
                     })
-                    ->addColumn('dealer_commission', function($item) {
-                        return $item->plenty > 0 ? number_format(($item->amount_paid - $item->plenty) * ( $item->client->projectPlan->dealer_commission / 100 )) : 0;
+                    ->addColumn('payment_method', function($item) {
+                        return isset(config('al_madina.cheque_draft_options')[$item->payment_method]) ? config('al_madina.cheque_draft_options')[$item->payment_method] : 'Other';
                     })
+                    // ->addColumn('dealer_commission', function($item) {
+                    //     return $item->plenty > 0 ? number_format(($item->amount_paid - $item->plenty) * ( $item->dealer->projectPlan->dealer_commission / 100 )) : 0;
+                    // })
                     ->addColumn('actions', function($item) {
                         return '
-                            <a class="btn padding-0 btn-circle" href="'.route('installments.edit', $item->id).'">
+                            <a class="btn padding-0 btn-circle" href="'.route('dealer-installments.edit', $item->id).'">
                                 <button type="button" class="btn bg-green btn-circle waves-effect waves-circle waves-float">
                                     <i class="material-icons">mode_edit</i>
                                 </button>
                             </a>
-                            <form class="btn padding-0 btn-circle" action="'.route('installments.destroy', $item->id).'" method="POST">
+                            <form class="btn padding-0 btn-circle" action="'.route('dealer-installments.destroy', $item->id).'" method="POST">
                                 <input type="hidden" name="_method" value="delete" />
                                 <input type="hidden" name="_token" value="'. csrf_token() .'">
                                 <button type="submit" class="btn bg-pink btn-circle waves-effect waves-circle waves-float" data-type="form-confirm">
@@ -59,7 +61,7 @@ class DealerInstallmentController extends Controller
                     ->make(true);
         }
 
-        return view('Installments.index');
+        return view('DealerInstallments.index');
     }
 
     /**
@@ -69,8 +71,8 @@ class DealerInstallmentController extends Controller
      */
     public function create()
     {
-        $clients  = Client::all();
-        return view('Installments.add', compact('clients'));
+        $dealers  = Dealer::with('projectPlan.project')->get();
+        return view('DealerInstallments.add', compact('dealers'));
     }
 
     /**
@@ -79,124 +81,92 @@ class DealerInstallmentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(InstallmentRequest $request)
+    public function store(DealerInstallmentRequest $request)
     {
         $data = $request->validated();
         $data['amount_paid'] = $amountPaid = str_replace(',', '', $data['amount_paid']);
 
-        $getClient = Client::find($data['client_id']);
-        $getProjectPlan = $getClient->projectPlan;
-        $clientDueDate = $getClient->due_date;
-        $todaydate = $data['payment_date'];
-        $todayday = date("d",strtotime($todaydate));;
-        $todaymonth = date("m",strtotime($todaydate));
-        $todayYear = date("Y",strtotime($todaydate));
-        $clientDueday = date("d",strtotime($clientDueDate));;
-        $clientDuemonth = date("m",strtotime($clientDueDate));
-        $clientDueYear = date("Y",strtotime($clientDueDate));
-
-
-
-        $amountPlenty = '0';
-
-        if ($todayday > $clientDueday && $todaymonth == $clientDuemonth && $todayYear == $clientDueYear) {
-            // Applied Plenty to amount_paid field.
-            $surCharge = $getProjectPlan->sur_charge;
-            $amountPlenty = $amountPaid * ($surCharge / 100);
-            $data['amount_paid'] = $amountPaid + $amountPlenty;
-        }
+        $getDealer = Dealer::find($data['dealer_id']);
 
         // Calculated Remaining amount
-        $getTotalPaidAmountByClient = DealerInstallment::where('client_id', $data['client_id'])->sum('amount_paid');
+        $getTotalPaidAmountByDealer = DealerInstallment::where('dealer_id', $data['dealer_id'])->sum('amount_paid');
 
-        // Substract Plenty Amount from previous tatal amount paid by client.
-        $getTotalPlentyAmount = DealerInstallment::where('client_id', $data['client_id'])->sum('plenty');
-        $getTotalPaidAmountByClient = $getTotalPaidAmountByClient - $getTotalPlentyAmount;
+        $totalAmount = $getDealer->total_amount;
+        $data['remaining_amount'] = $totalAmount - $getTotalPaidAmountByDealer - $amountPaid;
 
-        $totalAmount = $getProjectPlan->total_amount - $getClient->down_payment;
-        $data['remaining_amount'] = $totalAmount - $getTotalPaidAmountByClient - $amountPaid;
-
-        $data['plenty'] = $amountPlenty;
+        if ($data['remaining_amount'] < 0) {
+            return redirect()->back()->with(['status'=> 'danger', 'message'=> 'Amount can be greater then remaining amount.']);
+        }
 
         $installment = DealerInstallment::create($data);
-        ReportEvent::dispatch($installment);
-        return redirect()->route('installments.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
+        DealerReportEvent::dispatch($installment);
+        return redirect()->route('dealer-installments.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\DealerInstallment  $installment
+     * @param  \App\Models\DealerInstallment  $dealerInstallment
      * @return \Illuminate\Http\Response
      */
-    public function show(DealerInstallment $installment)
+    public function show(DealerInstallment $dealerInstallment)
     {
-        return view('Installments.show', compact('installment'));
+        return view('DealerInstallments.show', compact('dealerInstallment'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\DealerInstallment  $installment
+     * @param  \App\Models\DealerInstallment  $dealerInstallment
      * @return \Illuminate\Http\Response
      */
-    public function edit(DealerInstallment $installment)
+    public function edit(DealerInstallment $dealerInstallment)
     {
-        $clients  = Client::all();
-        return view('Installments.edit', compact('clients', 'installment'));
+        $dealers = Dealer::all();
+        return view('DealerInstallments.edit', compact('dealers', 'dealerInstallment'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\DealerInstallment  $installment
+     * @param  \App\Models\DealerInstallment  $dealerInstallment
      * @return \Illuminate\Http\Response
      */
-    public function update(InstallmentRequest $request, DealerInstallment $installment)
+    public function update(DealerInstallmentRequest $request, DealerInstallment $dealerInstallment)
     {
         $data = $request->validated();
         $data['amount_paid'] = $amountPaid = str_replace(',', '', $data['amount_paid']);
 
-        $getClient = Client::find($data['client_id']);
-        $getProjectPlan = $getClient->projectPlan;
-        $clientDueDate = $getClient->due_date;
-        $amountPlenty = '0';
-
-        if ($data['payment_date'] > $clientDueDate) {
-            // Applied Plenty to amount_paid field.
-            $surCharge = $getProjectPlan->sur_charge;
-            $amountPlenty = $amountPaid * ($surCharge / 100);
-            $data['amount_paid'] = $amountPaid + $amountPlenty;
-        }
+        $getDealer = Dealer::find($data['dealer_id']);
 
         // Calculated Remaining amount
-        $getTotalPaidAmountByClient = $installment->where('client_id', $data['client_id'])->sum('amount_paid');
+        $getTotalPaidAmountByDealer = DealerInstallment::where('id', '<', $dealerInstallment->id)->where('dealer_id', $data['dealer_id'])->sum('amount_paid');
 
-        // Substract Plenty Amount from previous tatal amount paid by client.
-        $getTotalPlentyAmount = $installment->where('client_id', $data['client_id'])->sum('plenty');
-        $getTotalPaidAmountByClient = $getTotalPaidAmountByClient - $getTotalPlentyAmount;
+        $totalAmount = $getDealer->total_amount;
+        $data['remaining_amount'] = $totalAmount - $getTotalPaidAmountByDealer - $amountPaid;
 
-        $totalAmount = $getProjectPlan->total_amount;
-        $data['remaining_amount'] = $totalAmount - $getTotalPaidAmountByClient - $amountPaid;
+        if ($data['remaining_amount'] < 0) {
+            return redirect()->back()->with(['status'=> 'danger', 'message'=> 'Amount can be greater then remaining amount.']);
+        }
 
-        $data['plenty'] = $amountPlenty;
-
-        $installment->update($data);
-        $installment->is_updated = 'yes';
-        ReportEvent::dispatch($installment);
-        return redirect()->route('installments.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
+        $dealerInstallment->update($data);
+        if ($dealerInstallment->remaining_amount <= 0) {
+            $dealerInstallment->where('id', '>', $dealerInstallment->id)->where('dealer_id', $data['dealer_id'])->delete();
+        }
+        DealerReportEvent::dispatch($dealerInstallment);
+        return redirect()->route('dealer-installments.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Installment  $installment
+     * @param  \App\Models\DealerInstallment  $dealerInstallment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(DealerInstallment $installment)
+    public function destroy(DealerInstallment $dealerInstallment)
     {
-        $installment->delete();
-        return redirect()->route('installments.index')->with(['status'=> 'success', 'message'=> 'Record successfully deleted.']);
+        $dealerInstallment->delete();
+        return redirect()->route('dealer-installments.index')->with(['status'=> 'success', 'message'=> 'Record successfully deleted.']);
     }
 }

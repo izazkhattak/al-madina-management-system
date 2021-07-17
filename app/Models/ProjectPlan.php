@@ -18,7 +18,11 @@ class ProjectPlan extends Model
         return $this->belongsTo(Project::class);
     }
 
-    public function installment() {
-        return $this->hasManyThrough(Installment::class, Client::class, 'project_plan_id', 'client_id');
+    public function clientInstallment() {
+        return $this->hasManyThrough(ClientInstallment::class, Client::class, 'project_plan_id', 'client_id');
+    }
+
+    public function dealerInstallment() {
+        return $this->hasManyThrough(DealerInstallment::class, Dealer::class, 'project_plan_id', 'dealer_id');
     }
 }

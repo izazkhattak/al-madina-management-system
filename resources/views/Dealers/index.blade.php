@@ -9,11 +9,11 @@
                 <div class="card">
                     <div class="header">
                         <h2>
-                            Project Plans
+                            Dealers
                         </h2>
                         <ul class="header-dropdown m-t--5">
                             <li>
-                                <a href="{{ route('project-plans.create') }}" type="button" class="btn bg-indigo waves-effect">Add New</a>
+                                <a href="{{ route('dealers.create') }}" type="button" class="btn bg-indigo waves-effect">Add New</a>
                             </li>
                         </ul>
                     </div>
@@ -23,10 +23,13 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Phone</th>
+                                        <th>CNIC</th>
                                         <th>Project</th>
-                                        <th>Installment Year</th>
-                                        <th>Sur-Charge</th>
-                                        <th>Dealer Commission</th>
+                                        <th>Project plan</th>
+                                        <th>Total amount</th>
+                                        <th>Monthly installments</th>
                                         <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
@@ -34,15 +37,19 @@
                                 <tfoot>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Phone</th>
+                                        <th>CNIC</th>
                                         <th>Project</th>
-                                        <th>Installment Year</th>
-                                        <th>Sur-Charge</th>
-                                        <th>Dealer Commission</th>
+                                        <th>Project plan</th>
+                                        <th>Total amount</th>
+                                        <th>Monthly installments</th>
                                         <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
+
                                 </tbody>
                             </table>
                         </div>
@@ -71,12 +78,15 @@
                 type: 'GET'
             },
             "columns": [
-                { "data": "id" },
-                { "data": "title","name": 'project.title' },
-                { "data": "installment_years"},
-                { "data": "sur_charge" },
-                { "data": "dealer_commission" },
-                { "data": "created_at" },
+                { "data": "id", visible:false },
+                { "data": "name" },
+                { "data": "phone" },
+                { "data": "cnic" },
+                { "data": "project" },
+                { "data": "project_plan" },
+                { "data": "total_amount" },
+                { "data": "monthly_installments" },
+                { "data": "created_at", visible:false  },
                 { "data": "actions", searchable: "true", "orderable": false }
             ]
         });

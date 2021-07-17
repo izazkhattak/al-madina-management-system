@@ -9,11 +9,11 @@
                 <div class="card">
                     <div class="header">
                         <h2>
-                            Installments
+                            Client Installments
                         </h2>
                         <ul class="header-dropdown m-t--5">
                             <li>
-                                <a href="{{ route('installments.create') }}" type="button" class="btn bg-indigo waves-effect">Add New</a>
+                                <a href="{{ route('client-installments.create') }}" type="button" class="btn bg-indigo waves-effect">Add New</a>
                             </li>
                         </ul>
                     </div>
@@ -29,7 +29,9 @@
                                         <th>Plenty</th>
                                         <th>Amount paid</th>
                                         <th>Remaining amount</th>
-                                        <th>Dealer commission</th>
+                                        <th>Paymnent Method</th>
+                                        <th>Cheque Draft No.</th>
+                                        {{-- <th>Dealer commission</th> --}}
                                         <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
@@ -43,7 +45,9 @@
                                         <th>Plenty</th>
                                         <th>Amount paid</th>
                                         <th>Remaining amount</th>
-                                        <th>Dealer commission</th>
+                                        <th>Paymnent Method</th>
+                                        <th>Cheque Draft No.</th>
+                                        {{-- <th>Dealer commission</th> --}}
                                         <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
@@ -85,7 +89,9 @@
                 { "data": "plenty" },
                 { "data": "amount_paid" },
                 { "data": "remaining_amount" },
-                { "data": "dealer_commission" },
+                { "data": "payment_method" },
+                { "data": "cheque_draft_no" },
+                // { "data": "dealer_commission" },
                 { "data": "created_at" , visible:false },
                 { "data": "actions", searchable: "true", "orderable": false }
             ]

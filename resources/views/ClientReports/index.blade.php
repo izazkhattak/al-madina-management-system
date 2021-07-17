@@ -92,7 +92,7 @@
         $(document).on('change', '#project_id', function() {
             $.ajax({
                 type: 'GET',
-                url: "{{ route('reports.get-project-plans') }}",
+                url: "{{ route('client-reports.get-project-plans') }}",
                 data: {
                     project_id: $(this).val()
                 },
@@ -112,7 +112,7 @@
         $(document).on('change', '#project_plan_id', function() {
             $.ajax({
                 type: 'GET',
-                url: "{{ route('reports.get-clients') }}",
+                url: "{{ route('client-reports.get-clients') }}",
                 data: {
                     project_id: $('#project_id').val(),
                     project_plan_id: $(this).val()
@@ -134,7 +134,7 @@
             let project_id = $('#project_id').val();
             let project_plan_id = $('#project_plan_id').val();
             let client_id = $("#client_id").val();
-            $('.table-reports-main table').DataTable().ajax.url("{{ route('reports.get-reports') }}?project_id=" + project_id + "&client_id=" + client_id).load();
+            $('.table-reports-main table').DataTable().ajax.url("{{ route('client-reports.get-reports') }}?project_id=" + project_id + "&client_id=" + client_id).load();
             $('.table-reports-main table').css('width', '100%');
             $('.table-reports-main').removeClass('hidden');
         });
@@ -151,7 +151,7 @@
             "pageLength": 25,
             "ajax": {
                 type: 'GET',
-                url: "{{ route('reports.get-reports') }}"
+                url: "{{ route('client-reports.get-reports') }}"
             },
             "columns": [
                 { "data": "name" },

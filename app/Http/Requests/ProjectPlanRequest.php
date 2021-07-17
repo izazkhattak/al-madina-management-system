@@ -14,9 +14,6 @@ class ProjectPlanRequest extends BaseFormRequest
             'installment_years' => [
                 'required'
             ],
-            'total_amount' => [
-                'required'
-            ],
             'sur_charge' => [
                 'required'
             ],

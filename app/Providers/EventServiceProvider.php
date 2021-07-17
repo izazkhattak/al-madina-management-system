@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
-use App\Events\ReportEvent;
-use App\Listeners\ReportListener;
+use App\Events\ClientReportEvent;
+use App\Events\DealerReportEvent;
+use App\Listeners\ClientReportListener;
+use App\Listeners\DealerReportListener;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -19,8 +21,11 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        ReportEvent::class => [
-            ReportListener::class,
+        ClientReportEvent::class => [
+            ClientReportListener::class,
+        ],
+        DealerReportEvent::class => [
+            DealerReportListener::class,
         ],
     ];
 

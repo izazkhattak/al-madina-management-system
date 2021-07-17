@@ -35,7 +35,7 @@
                                         <option value="">Please select a project</option>
                                         @forelse ($projects as $project)
 
-                                        <option {{ isset($projectID) && $projectID == $project->id ? 'selected' : '' }} value="{{ $project->id }}">{{ $project->title }}</option>
+                                        <option {{ (isset($projectID) && $projectID == $project->id) || old('project_id') == $project->id ? 'selected' : '' }} value="{{ $project->id }}">{{ $project->title }}</option>
 
                                         @empty
                                         @endforelse
@@ -49,21 +49,10 @@
                             </div>
                             <div class="form-group form-float">
                                 <div class="form-line">
-                                    <input type="text" value="{{ old('name', isset($edit_installment_years) ? $edit_installment_years : '') }}" name="installment_years" class="form-control">
+                                    <input type="text" value="{{ old('installment_years', isset($edit_installment_years) ? $edit_installment_years : '') }}" name="installment_years" class="form-control">
                                     <label class="form-label">Installment years</label>
                                 </div>
                                 @error('installment_years')
-                                    <label class="error" role="alert">
-                                        {{ $message }}
-                                    </label>
-                                @enderror
-                            </div>
-                            <div class="form-group form-float">
-                                <div class="form-line">
-                                    <input type="text" value="{{ old('total_amount', isset($edit_total_amount) ? number_format($edit_total_amount, 2) : '') }}" name="total_amount" class="money-format-input form-control">
-                                    <label class="form-label">Total amount</label>
-                                </div>
-                                @error('total_amount')
                                     <label class="error" role="alert">
                                         {{ $message }}
                                     </label>

@@ -13,7 +13,11 @@
                         </h2>
                         <ul class="header-dropdown m-t--5">
                             <li>
-                                <a href="{{ route('clients.create') }}" type="button" class="btn bg-indigo waves-effect">Add New</a>
+                                <a href="{{ route('csv.download-unpaid-clients') }}" class="btn bg-brown waves-effect">Download Unpaid Clients</a>
+                                <a href="{{ route('csv.download-clients') }}" class="btn bg-teal waves-effect">Download Clients</a>
+                            </li>
+                            <li>
+                                <a href="{{ route('clients.create') }}" class="btn bg-indigo waves-effect">Add New</a>
                             </li>
                         </ul>
                     </div>
