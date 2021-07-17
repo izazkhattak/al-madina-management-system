@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Models\Project;
 use App\Models\ProjectPlan;
-use App\Models\Report;
+use App\Models\DealerReport;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
-class ReportController extends Controller
+class DealerReportController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -46,10 +46,10 @@ class ReportController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Report  $report
+     * @param  \App\Models\DealerReport  $report
      * @return \Illuminate\Http\Response
      */
-    public function show(Report $report)
+    public function show(DealerReport $report)
     {
         //
     }
@@ -57,10 +57,10 @@ class ReportController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Report  $report
+     * @param  \App\Models\DealerReport  $report
      * @return \Illuminate\Http\Response
      */
-    public function edit(Report $report)
+    public function edit(DealerReport $report)
     {
         //
     }
@@ -69,10 +69,10 @@ class ReportController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Report  $report
+     * @param  \App\Models\DealerReport  $report
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Report $report)
+    public function update(Request $request, DealerReport $report)
     {
         //
     }
@@ -80,10 +80,10 @@ class ReportController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Report  $report
+     * @param  \App\Models\DealerReport  $report
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Report $report)
+    public function destroy(DealerReport $report)
     {
         //
     }
@@ -115,26 +115,26 @@ class ReportController extends Controller
         $projectID = $request->input('project_id');
         $projectPlanID = $request->input('project_plan_id');
 
-        return DataTables::of(Report::where(['client_id'=> $clientID, 'project_id'=> $projectID]))
+        return DataTables::of(DealerReport::where(['client_id'=> $clientID, 'project_id'=> $projectID]))
                     ->addIndexColumn()
                     ->addColumn('name', function ($row) {
                         $name = $row->client->cnic . "/" . $row->client->name;
                         return $name;
                     })
                      ->addColumn('due_amount', function ($row) {
-                        
+
                         return number_format($row->due_amount);
                     })
                       ->addColumn('out_stand', function ($row) {
-                        
+
                         return number_format($row->out_stand);
                     })
                       ->addColumn('paid', function ($row) {
-                        
+
                         return number_format($row->paid);
                     })
                       ->addColumn('sur_charge', function ($row) {
-                        
+
                         return number_format($row->sur_charge);
                     })
                     ->make(true);

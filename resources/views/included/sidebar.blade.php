@@ -30,15 +30,33 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('clients.index') }}">
+                        <i class="material-icons">account_circle</i>
+                        <span>Client Installments</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('clients.index') }}">
+                        <i class="material-icons">account_circle</i>
+                        <span>Client Reports</span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('installments.index') }}">
                         <i class="material-icons">gavel</i>
-                        <span>Installments</span>
+                        <span>Dealers</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('installments.index') }}">
+                        <i class="material-icons">gavel</i>
+                        <span>Dealer Installments</span>
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('reports.index') }}">
                         <i class="material-icons">report</i>
-                        <span>Reports</span>
+                        <span>Dealer Reports</span>
                     </a>
                 </li>
             </ul>

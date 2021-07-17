@@ -25,7 +25,7 @@ class CreateClientInstallmentsTable extends Migration
             $table->decimal('amount_paid', 20, 2);
             $table->decimal('remaining_amount', 20, 2);
             $table->string('payment_method');
-            $table->string('check_draft_no');
+            $table->string('cheque_draft_no');
             $table->timestamps();
         });
     }

@@ -13,7 +13,7 @@ class CreateInstallmentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('installments', function (Blueprint $table) {
+        Schema::create('dealer_installments', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('client_id')->nullable()
@@ -21,11 +21,10 @@ class CreateInstallmentsTable extends Migration
                 ->onDelete('cascade');
 
             $table->date('payment_date');
-            $table->decimal('plenty', 20, 2);
             $table->decimal('amount_paid', 20, 2);
             $table->decimal('remaining_amount', 20, 2);
             $table->string('payment_method');
-            $table->string('check_draft_no');
+            $table->string('cheque_draft_no');
             $table->timestamps();
         });
     }

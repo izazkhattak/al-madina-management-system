@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use App\Events\ReportEvent;
 use App\Http\Requests\InstallmentRequest;
 use App\Models\Client;
-use App\Models\Installment;
+use App\Models\DealerInstallment;
 use App\Models\ProjectPlan;
 use Yajra\DataTables\Facades\DataTables;
 
-class InstallmentController extends Controller
+class DealerInstallmentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,7 +19,7 @@ class InstallmentController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            return DataTables::of(Installment::with('client.projectPlan'))
+            return DataTables::of(DealerInstallment::with('client.projectPlan'))
                     ->addIndexColumn()
                     ->addColumn('created_at', function($item) {
                         return $item->created_at != null ? $item->created_at->format('Y-m-d H:i') : '';
@@ -107,10 +107,10 @@ class InstallmentController extends Controller
         }
 
         // Calculated Remaining amount
-        $getTotalPaidAmountByClient = Installment::where('client_id', $data['client_id'])->sum('amount_paid');
+        $getTotalPaidAmountByClient = DealerInstallment::where('client_id', $data['client_id'])->sum('amount_paid');
 
         // Substract Plenty Amount from previous tatal amount paid by client.
-        $getTotalPlentyAmount = Installment::where('client_id', $data['client_id'])->sum('plenty');
+        $getTotalPlentyAmount = DealerInstallment::where('client_id', $data['client_id'])->sum('plenty');
         $getTotalPaidAmountByClient = $getTotalPaidAmountByClient - $getTotalPlentyAmount;
 
         $totalAmount = $getProjectPlan->total_amount - $getClient->down_payment;
@@ -118,7 +118,7 @@ class InstallmentController extends Controller
 
         $data['plenty'] = $amountPlenty;
 
-        $installment = Installment::create($data);
+        $installment = DealerInstallment::create($data);
         ReportEvent::dispatch($installment);
         return redirect()->route('installments.index')->with(['status'=> 'success', 'message'=> 'Record successfully saved.']);
     }
@@ -126,10 +126,10 @@ class InstallmentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Installment  $installment
+     * @param  \App\Models\DealerInstallment  $installment
      * @return \Illuminate\Http\Response
      */
-    public function show(Installment $installment)
+    public function show(DealerInstallment $installment)
     {
         return view('Installments.show', compact('installment'));
     }
@@ -137,10 +137,10 @@ class InstallmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Installment  $installment
+     * @param  \App\Models\DealerInstallment  $installment
      * @return \Illuminate\Http\Response
      */
-    public function edit(Installment $installment)
+    public function edit(DealerInstallment $installment)
     {
         $clients  = Client::all();
         return view('Installments.edit', compact('clients', 'installment'));
@@ -150,10 +150,10 @@ class InstallmentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Installment  $installment
+     * @param  \App\Models\DealerInstallment  $installment
      * @return \Illuminate\Http\Response
      */
-    public function update(InstallmentRequest $request, Installment $installment)
+    public function update(InstallmentRequest $request, DealerInstallment $installment)
     {
         $data = $request->validated();
         $data['amount_paid'] = $amountPaid = str_replace(',', '', $data['amount_paid']);
@@ -194,7 +194,7 @@ class InstallmentController extends Controller
      * @param  \App\Models\Installment  $installment
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Installment $installment)
+    public function destroy(DealerInstallment $installment)
     {
         $installment->delete();
         return redirect()->route('installments.index')->with(['status'=> 'success', 'message'=> 'Record successfully deleted.']);

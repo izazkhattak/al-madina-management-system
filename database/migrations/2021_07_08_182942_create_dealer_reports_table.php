@@ -13,10 +13,10 @@ class CreateReportsTable extends Migration
      */
     public function up()
     {
-        Schema::create('reports', function (Blueprint $table) {
+        Schema::create('dealer_reports', function (Blueprint $table) {
             $table->id();
 
-            $table->foreignId('client_id')->nullable()
+            $table->foreignId('dealer_id')->nullable()
                 ->constrained()
                 ->onDelete('cascade');
 
@@ -33,7 +33,7 @@ class CreateReportsTable extends Migration
             $table->decimal('paid', 20, 2);
             $table->date('paid_on');
             $table->integer('out_stand');
-            $table->string('check_draft_no');
+            $table->string('cheque_draft_no');
 
             $table->timestamps();
         });

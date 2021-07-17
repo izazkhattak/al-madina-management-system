@@ -4,10 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Report extends Model
+class DealerReport extends Model
 {
     protected $fillable = [
-        'client_id',
+        'dealer_id',
         'project_id',
         'installment_id',
         'due_amount',
@@ -15,7 +15,7 @@ class Report extends Model
         'paid',
         'paid_on',
         'out_stand',
-        'sur_charge',
+        'cheque_draft_no',
     ];
 
     public function client() {
