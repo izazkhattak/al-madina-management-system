@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReportsTable extends Migration
+class CreateDealerReportsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -24,7 +24,7 @@ class CreateReportsTable extends Migration
                 ->constrained()
                 ->onDelete('cascade');
 
-            $table->foreignId('installment_id')->nullable()
+            $table->foreignId('dealer_installment_id')->nullable()
                 ->constrained()
                 ->onDelete('cascade');
 
