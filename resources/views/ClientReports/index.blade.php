@@ -43,9 +43,9 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Due Amount</th>
+                                        {{-- <th>Due Amount</th> --}}
                                         <th>Due Date</th>
-                                        <th>Paid</th>
+                                        <th>Paid Amount</th>
                                         <th>Paid On</th>
                                         <th>Remaining Amount</th>
                                         <th>Surcharge</th>
@@ -53,9 +53,11 @@
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="3" style="text-align:right">Total Paid:</th>
                                         <th></th>
-                                        <th colspan="2" style="text-align:right">Sur Charge:</th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
                                         <th></th>
                                     </tr>
                                 </tfoot>
@@ -155,7 +157,7 @@
             },
             "columns": [
                 { "data": "name" },
-                { "data": "due_amount" },
+                // { "data": "due_amount" },
                 { "data": "due_date" },
                 { "data": "paid" },
                 { "data": "paid_on" },
@@ -173,33 +175,48 @@
                             i : 0;
                 };
 
-                // Total over this page
+                //******************************////
+                //******Total Paid Calculation****************///
+                //******************************////
                 let pageTotal = api
-                    .column( 3, { page: 'current'} )
+                    .column( 2, { page: 'current'} )
                     .data()
                     .reduce( function (a, b) {
                         return intVal(a) + intVal(b);
                     }, 0 );
 
                 // Update footer
-                $( api.column( 3 ).footer() ).html(
-                    pageTotal
+                $( api.column( 2 ).footer() ).html(
+                    'Total Paid: ' + pageTotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+                //******************************////
+                //******Total Remaning Calculation****************///
+                //******************************////
+                let pageTotalRemaining = api
+                    .column( 4, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+
+                // Update footer
+                $( api.column( 4 ).footer() ).html(
+                    'Total Remaining: ' + pageTotalRemaining.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 );
 
                 //******************************////
                 //******Sur Charge Calculation****************///
                 //******************************////
-                // Total over this page
                 let pageTotalSurchange = api
-                    .column( 6, { page: 'current'} )
+                    .column( 5, { page: 'current'} )
                     .data()
                     .reduce( function (a, b) {
                         return intVal(a) + intVal(b);
                     }, 0 );
 
                 // Update footer
-                $( api.column( 6 ).footer() ).html(
-                    pageTotalSurchange
+                $( api.column( 5 ).footer() ).html(
+                    'Sur Charge: ' + pageTotalSurchange.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 );
             }
         });

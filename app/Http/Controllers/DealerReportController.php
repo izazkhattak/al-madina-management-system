@@ -122,10 +122,10 @@ class DealerReportController extends Controller
                         $name = $row->dealer->cnic . "/" . $row->dealer->name;
                         return $name;
                     })
-                     ->addColumn('due_amount', function ($row) {
+                    //  ->addColumn('due_amount', function ($row) {
 
-                        return number_format($row->due_amount);
-                    })
+                    //     return number_format($row->due_amount);
+                    // })
                       ->addColumn('out_stand', function ($row) {
 
                         return number_format($row->out_stand);
@@ -136,7 +136,7 @@ class DealerReportController extends Controller
                     })
                       ->addColumn('cheque_draft_no', function ($row) {
 
-                        return number_format($row->cheque_draft_no);
+                        return $row->cheque_draft_no;
                     })
                     ->make(true);
     }

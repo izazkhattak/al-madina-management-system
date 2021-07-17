@@ -122,10 +122,10 @@ class ClientReportController extends Controller
                         $name = $row->client->cnic . "/" . $row->client->name;
                         return $name;
                     })
-                     ->addColumn('due_amount', function ($row) {
+                    //  ->addColumn('due_amount', function ($row) {
 
-                        return number_format($row->due_amount);
-                    })
+                    //     return number_format($row->due_amount);
+                    // })
                       ->addColumn('out_stand', function ($row) {
 
                         return number_format($row->out_stand);

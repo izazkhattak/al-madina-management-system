@@ -43,8 +43,8 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Due Amount</th>
-                                        <th>Paid</th>
+                                        {{-- <th>Due Amount</th> --}}
+                                        <th>Paid Amount</th>
                                         <th>Paid On</th>
                                         <th>Remaining Amount</th>
                                         <th>Cheque draft no</th>
@@ -52,8 +52,11 @@
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="4" style="text-align:right">Total Paid:</th>
-                                        <th colspan="2"></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
@@ -152,7 +155,7 @@
             },
             "columns": [
                 { "data": "name" },
-                { "data": "due_amount" },
+                // { "data": "due_amount" },
                 { "data": "paid" },
                 { "data": "paid_on" },
                 { "data": "out_stand" },
@@ -169,7 +172,11 @@
                             i : 0;
                 };
 
-                // Total over this page
+
+
+                //******************************////
+                //******Total Paid Calculation****************///
+                //******************************///
                 let pageTotal = api
                     .column( 1, { page: 'current'} )
                     .data()
@@ -178,8 +185,23 @@
                     }, 0 );
 
                 // Update footer
-                $( api.column( 4 ).footer() ).html(
-                    pageTotal
+                $( api.column( 1 ).footer() ).html(
+                    'Total Paid: ' + pageTotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                //******************************////
+                //******Total Remaining Calculation****************///
+                //******************************///
+                let pageTotalRemaining = api
+                    .column( 3, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+
+                // Update footer
+                $( api.column( 3 ).footer() ).html(
+                    'Total Remaining: ' + pageTotalRemaining.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 );
             }
         });
