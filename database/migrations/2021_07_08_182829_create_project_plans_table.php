@@ -19,7 +19,6 @@ class CreateProjectPlansTable extends Migration
                 ->constrained()
                 ->onDelete('cascade');
             $table->integer('installment_years')->nullable();
-            $table->decimal('total_amount', 20, 2)->nullable();
             $table->integer('sur_charge')->nullable();
             $table->integer('dealer_commission')->nullable();
             $table->timestamps();

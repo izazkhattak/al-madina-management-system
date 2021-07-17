@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReportsTable extends Migration
+class CreateClientReportsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateReportsTable extends Migration
      */
     public function up()
     {
-        Schema::create('reports', function (Blueprint $table) {
+        Schema::create('client_reports', function (Blueprint $table) {
             $table->id();
-
             $table->foreignId('client_id')->nullable()
                 ->constrained()
                 ->onDelete('cascade');
@@ -24,7 +23,7 @@ class CreateReportsTable extends Migration
                 ->constrained()
                 ->onDelete('cascade');
 
-            $table->foreignId('installment_id')->nullable()
+            $table->foreignId('client_installment_id')->nullable()
                 ->constrained()
                 ->onDelete('cascade');
 
@@ -33,7 +32,7 @@ class CreateReportsTable extends Migration
             $table->decimal('paid', 20, 2);
             $table->date('paid_on');
             $table->integer('out_stand');
-            $table->string('check_draft_no');
+            $table->decimal('sur_charge', 20, 2);
 
             $table->timestamps();
         });
@@ -46,6 +45,6 @@ class CreateReportsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reports');
+        Schema::dropIfExists('client_reports');
     }
 }
