@@ -133,7 +133,7 @@
         //Dollar Money
         $demoMaskedInput.find('.cnic-format').inputmask('99999-9999999-9', { placeholder: '_____-_______-_' });
         //Phone Number
-        $demoMaskedInput.find('.phone-number').inputmask('+99 (999) 999-99-99', { placeholder: '+__ (___) ___-__-__' });
+        $demoMaskedInput.find('.phone-number').inputmask('+999999999999', { placeholder: '+____________' });
         //Bootstrap datepicker plugin
         $('#bs_datepicker_container input').datepicker({
             autoclose: true,
