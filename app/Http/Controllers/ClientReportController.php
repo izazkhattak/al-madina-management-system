@@ -22,73 +22,6 @@ class ClientReportController extends Controller
         return view('ClientReports.index', compact('projects'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\ClientReport  $clientReport
-     * @return \Illuminate\Http\Response
-     */
-    public function show(ClientReport $clientReport)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\ClientReport  $clientReport
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ClientReport $clientReport)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\ClientReport  $clientReport
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, ClientReport $clientReport)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\ClientReport  $clientReport
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(ClientReport $clientReport)
-    {
-        //
-    }
-
-
     public function getProjectPlans(Request $request) {
         $projectID = $request->input('project_id');
         $projectPlans = ProjectPlan::where('project_id', $projectID)->get();
@@ -111,7 +44,6 @@ class ClientReportController extends Controller
     }
 
     public function getReports(Request $request) {
-        // return $request;
         $clientID = $request->input('client_id');
         $projectID = $request->input('project_id');
         $projectPlanID = $request->input('project_plan_id');
@@ -122,10 +54,6 @@ class ClientReportController extends Controller
                         $name = $row->client->cnic . "/" . $row->client->name;
                         return $name;
                     })
-                    //  ->addColumn('due_amount', function ($row) {
-
-                    //     return number_format($row->due_amount);
-                    // })
                       ->addColumn('out_stand', function ($row) {
 
                         return number_format($row->out_stand);

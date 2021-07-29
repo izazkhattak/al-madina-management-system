@@ -59,6 +59,12 @@
                         <span>Dealer Reports</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('all-client-reports.index') }}">
+                        <i class="material-icons">assessment</i>
+                        <span>All Client Reports</span>
+                    </a>
+                </li>
             </ul>
         </div>
         <!-- #Menu -->

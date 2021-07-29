@@ -27,7 +27,7 @@
                 <!-- #END# Call Search -->
                 <!-- #END# Tasks -->
                 <li class="pull-right">
-                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    <a href="javascript:void(0);" style="display: flex;align-items: center;justify-content: center;" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         {{ auth()->user()->name }} <i class="material-icons">more_vert</i>
                     </a>
                     <ul class="dropdown-menu pull-right">

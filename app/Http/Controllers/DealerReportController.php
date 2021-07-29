@@ -23,72 +23,6 @@ class DealerReportController extends Controller
         return view('DealerReports.index', compact('projects'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\DealerReport  $report
-     * @return \Illuminate\Http\Response
-     */
-    public function show(DealerReport $report)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\DealerReport  $report
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(DealerReport $report)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\DealerReport  $report
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, DealerReport $report)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\DealerReport  $report
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(DealerReport $report)
-    {
-        //
-    }
-
     public function getProjectPlans(Request $request) {
         $projectID = $request->input('project_id');
         $projectPlans = ProjectPlan::where('project_id', $projectID)->get();
@@ -111,7 +45,6 @@ class DealerReportController extends Controller
     }
 
     public function getReports(Request $request) {
-        // return $request;
         $dealerID = $request->input('dealer_id');
         $projectID = $request->input('project_id');
         $projectPlanID = $request->input('project_plan_id');
@@ -122,10 +55,6 @@ class DealerReportController extends Controller
                         $name = $row->dealer->cnic . "/" . $row->dealer->name;
                         return $name;
                     })
-                    //  ->addColumn('due_amount', function ($row) {
-
-                    //     return number_format($row->due_amount);
-                    // })
                       ->addColumn('out_stand', function ($row) {
 
                         return number_format($row->out_stand);

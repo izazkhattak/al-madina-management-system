@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AllClientReportController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ClientInstallmentController;
 use App\Http\Controllers\ClientReportController;
@@ -61,5 +62,10 @@ Route::middleware('auth')->group(function () {
     Route::prefix('csv')->as('csv.')->group(function () {
         Route::get('download-clients', [ClientController::class, 'downloadClients'])->name('download-clients');
         Route::get('download-unpaid-clients', [ClientController::class, 'downloadUnpaidClients'])->name('download-unpaid-clients');
+    });
+
+    Route::prefix('all-client-reports')->as('all-client-reports.')->group(function () {
+        Route::get('/', [AllClientReportController::class, 'index'])->name('index');
+        Route::get('/reports', [AllClientReportController::class, 'reports'])->name('reports');
     });
 });
