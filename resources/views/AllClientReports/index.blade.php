@@ -72,10 +72,12 @@
                                         <th>Name</th>
                                         <th>Total Amount</th>
                                         <th>Total Installments</th>
+                                        <th>Total Balance</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
+                                        <th></th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -129,7 +131,8 @@
             "columns": [
                 { "data": "name" },
                 { "data": "total_amount" },
-                { "data": "total_paid" }
+                { "data": "total_paid" },
+                { "data": "total_bal" },
             ],
             "footerCallback": function ( row, data, start, end, display ) {
                 var api = this.api(), data;
@@ -168,6 +171,21 @@
                     }, 0 );
                 $( api.column( 2 ).footer() ).html(
                     'Total Installments: ' + pageTotalRemaining.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+
+                 //******************************////
+                //******Total balance Calculation****************///
+                //******************************///
+                let pageTotalBal = api
+                    .column( 3, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+
+                // Update footer
+                $( api.column( 3 ).footer() ).html(
+                    'Total Balance: ' + pageTotalBal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 );
             }
         });

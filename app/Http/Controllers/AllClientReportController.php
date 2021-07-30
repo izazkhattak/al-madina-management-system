@@ -22,10 +22,10 @@ class AllClientReportController extends Controller
         $projects = ClientReport::where(['project_id' => $projectID])
             ->groupBy('client_id')
             ->leftJoin('clients', 'clients.id', '=', 'client_reports.client_id')
-            ->selectRaw("cnic, name, SUM(due_amount) as total_amount, SUM(paid) as total_paid")->get();
+            ->selectRaw("cnic, name, due_amount as total_amount, SUM(paid) as total_paid , clients.down_payment as down_paid")->get();
 
         $totalAmountSum = $projects->sum('total_amount');
-        $totalPaidSum = $projects->sum('total_paid');
+        $totalPaidSum = $projects->sum('total_paid') + $projects->sum('down_paid');
 
         $data = array(
             'total_amount' => $totalAmountSum,
@@ -43,9 +43,14 @@ class AllClientReportController extends Controller
 
                 return number_format($row->total_amount);
             })
-            ->addColumn('total_paid', function ($row) {
-
-                return number_format($row->total_paid);
+           ->addColumn('total_paid', function ($row) {
+                        $calculate = $row->down_paid + $row->total_paid;
+                return number_format($calculate);
+            })
+            ->addColumn('total_bal', function ($row) {
+                $add = $row->down_paid + $row->total_paid;
+                $calculate = $row->total_amount - $add;
+                return number_format($calculate);
             })
             ->make(true);
     }
