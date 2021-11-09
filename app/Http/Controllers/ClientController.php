@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ClientRequest;
 use App\Models\Client;
 use App\Models\ProjectPlan;
+use App\Models\Schedule;
+use Carbon\Carbon;
 use Yajra\DataTables\Facades\DataTables;
 
 class ClientController extends Controller
@@ -78,15 +80,58 @@ class ClientController extends Controller
         $data['total_amount'] = str_replace(',', '', $data['total_amount']);
 
         $getProjectPlan = ProjectPlan::find($data['project_plan_id']);
+        $getProject = $getProjectPlan->project;
 
         $totalAmount = $data['total_amount'];
-        $installmentYearMonths = $getProjectPlan->installment_years * 12;
+        if (!isset($getProject->project_type) && $getProject->project_type != '2') {
+            $installmentYearMonths = $getProjectPlan->installment_years * 12;
+            // Calculated monthly installments;
+            $data['monthly_installments'] = ($totalAmount - $data['down_payment']) / $installmentYearMonths;
+        }
 
-        // Calculated monthly installments;
-        $data['monthly_installments'] = ($totalAmount - $data['down_payment']) / $installmentYearMonths;
 
-        Client::create($data);
+        $client = Client::create($data);
+
+        if (isset($getProject->project_type) && $getProject->project_type == '2') {
+            $this->createSchedules($data, $getProjectPlan, $client);
+        }
+
         return redirect()->route('clients.index')->with(['status' => 'success', 'message' => 'Record successfully saved.']);
+    }
+
+    public function createSchedules(array $data, $projectPlan, $client)
+    {
+        $quaterMonths = intval(($projectPlan->installment_years * 12) / 3);
+        $quarterTotalAmount = ($data['total_amount'] - $data['down_payment']) / $quaterMonths;
+        $scheduleData = array(
+            array(
+                'due_date' => Carbon::parse($data['due_date'])->format('Y-m-d'),
+                'client_id'=> $client->id,
+                'project_id'=> $projectPlan->project_id,
+                'amount_paid'=> $data['down_payment'],
+                'remaining_amount'=> ($data['total_amount'] - $data['down_payment']),
+                'total_amount'=> $data['total_amount'],
+                'installments'=> null,
+                'created_at'=> now(),
+            )
+        );
+        for ($i = 1; $i <= $quaterMonths; $i++) {
+
+            $newData = end($scheduleData);
+
+            array_push($scheduleData, [
+                'due_date' => Carbon::parse($newData['due_date'])->addMonths(3)->format('Y-m-d'),
+                'client_id'=> $newData['client_id'],
+                'project_id'=> $newData['project_id'],
+                'amount_paid'=> null,
+                'remaining_amount'=> null,
+                'total_amount'=> $data['total_amount'],
+                'installments'=> $quarterTotalAmount,
+                'created_at'=> now(),
+            ]);
+        }
+
+        Schedule::insert($scheduleData);
     }
 
     /**

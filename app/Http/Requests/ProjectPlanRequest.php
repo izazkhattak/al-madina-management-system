@@ -9,7 +9,7 @@ class ProjectPlanRequest extends BaseFormRequest
     {
         return [
             'project_id' => [
-                'required'
+                'required', 'exists:projects,id'
             ],
             'installment_years' => [
                 'required'

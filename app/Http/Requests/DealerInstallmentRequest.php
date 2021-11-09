@@ -9,7 +9,7 @@ class DealerInstallmentRequest extends BaseFormRequest
     {
         return [
             'dealer_id' => [
-                'required'
+                'required', 'exists:dealers,id'
             ],
             'payment_date' => [
                 'required'

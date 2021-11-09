@@ -11,7 +11,7 @@ class ClientInstallmentRequest extends BaseFormRequest
     {
         return [
             'client_id' => [
-                'required'
+                'required', 'exists:clients,id'
             ],
             'payment_date' => [
                 'required'

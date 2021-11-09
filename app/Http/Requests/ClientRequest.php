@@ -20,7 +20,7 @@ class ClientRequest extends BaseFormRequest
                 'required'
             ],
             'project_plan_id' => [
-                'required'
+                'required', 'exists:project_plans,id'
             ],
             'total_amount' => [
                 'required'
