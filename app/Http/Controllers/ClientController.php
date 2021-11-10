@@ -19,7 +19,7 @@ class ClientController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            return DataTables::of(Client::with('projectPlan.project')->get())
+            return DataTables::of(Client::with('projectPlan.project', 'schedules')->get())
                 ->addIndexColumn()
                 ->addColumn('project', function ($item) {
                     return $item->projectPlan->project->title;

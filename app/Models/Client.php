@@ -24,4 +24,9 @@ class Client extends Model
     public function clientInstallments() {
         return $this->hasMany(ClientInstallment::class, 'client_id');
     }
+
+    public function schedules()
+    {
+        return $this->hasMany(Schedule::class, 'client_id');
+    }
 }

@@ -92,22 +92,95 @@
 <script type="application/javascript">
     /* Formatting function for row details - modify as you need */
     function format ( d ) {
+        let i, tablebodydata = '', tableTitle = '';
+        tableTitle = `
+            <div>
+                <h5 style="margin-top:0;">Schedule</h5>
+            </div>
+        `;
+        for(i = 0; i < d.schedules.length; i++) {
+            tablebodydata += `
+                    <tr>
+                        <td>${d.schedules[i].due_date}</td>
+                        <td>${d.name}/${d.cnic}</td>
+                        <td>${d.project}</td>
+                        <td>
+                            <form method="GET" action="{{ url('schedule-submit/${d.schedules[i].id}') }}">
+                                <span class="edit-row-text">${d.schedules[i].amount_paid}</span>
+                                <input style="display:none" type="number" value="${d.schedules[i].amount_paid}" name="amount_paid">
+                            </form>
+                        </td>
+                        <td>
+                            <span class="remaining-row-text">${d.schedules[i].remaining_amount}</span>
+                        </td>
+                        <td>${d.schedules[i].total_amount}</td>
+                        <td>${d.schedules[i].installments}</td>
+                        <td>
+                            <span ${d.schedules[i].installments <= 0 ? 'style="display:none"': ''}>
+                                <i class="material-icons edit-shedule-row">mode_edit</i>
+                                <i style="display:none;" class="material-icons done-shedule-row">done</i>
+                            <span>
+                        </td>
+                    </tr>
+                `;
+            }
         // `d` is the original data object for the row
-        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-            '<tr>'+
-                '<td colspan="2" class="text-center" style="font-weight: 600;">Schedules</td>'+
-            '</tr>'+
-            '<tr>'+
-                '<td>Full name:</td>'+
-                '<td>'+d.name+'</td>'+
-            '</tr>'+
-            '<tr>'+
-                '<td>Phone:</td>'+
-                '<td>'+d.phone+'</td>'+
-            '</tr>'+
-        '</table>';
+        return `${tableTitle}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <td style="font-weight: 500;">Date</td>
+                        <td style="font-weight: 500;">Client</td>
+                        <td style="font-weight: 500;">Project</td>
+                        <td style="font-weight: 500;">Amount Paid</td>
+                        <td style="font-weight: 500;">Remaining Amount</td>
+                        <td style="font-weight: 500;">Total Amount</td>
+                        <td style="font-weight: 500;">Installment</td>
+                        <td style="font-weight: 500;">Action</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${tablebodydata}
+                <tbody>
+            </table>
+        </div>`;
     }
 
+    $(document).ready(function() {
+        $(document).on('click', '.edit-shedule-row', function() {
+            let this_this = $(this);
+            this_this.closest('tr').find('input').show();
+            this_this.closest('tr').find('.edit-row-text').hide();
+            this_this.closest('tr').find('.done-shedule-row').show();
+            this_this.hide();
+        });
+
+        $(document).on('click', '.done-shedule-row', function() {
+            let this_this = $(this);
+
+            this_this.closest('tr').find('input').hide();
+            this_this.closest('tr').find('.edit-row-text').show();
+            this_this.closest('tr').find('.edit-shedule-row').show();
+            this_this.hide();
+
+            if (this_this.closest('tr').find('input').val() > 0) {
+                $.ajax({
+                    type: this_this.closest('tr').find('form').attr('method'),
+                    url: this_this.closest('tr').find('form').attr('action'),
+                    data: this_this.closest('tr').find('form').serialize(),
+                    success: function(response) {
+                        console.log(response);
+
+                        if (response.remaining_amount) {
+                            this_this.closest('tr').find('.edit-shedule-text').text(response.remaining_amount);
+                        }
+                    }
+                });
+            }
+
+        });
+    })
     var table = $('.js-basic-example').DataTable({
             dom: 'Bfrtip',
             responsive: true,

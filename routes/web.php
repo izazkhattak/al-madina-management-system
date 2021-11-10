@@ -9,6 +9,7 @@ use App\Http\Controllers\DealerInstallmentController;
 use App\Http\Controllers\DealerReportController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectPlanController;
+use App\Http\Controllers\ScheduleController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -68,4 +69,6 @@ Route::middleware('auth')->group(function () {
         Route::get('/', [AllClientReportController::class, 'index'])->name('index');
         Route::get('/reports', [AllClientReportController::class, 'reports'])->name('reports');
     });
+
+    Route::get('schedule-submit/{schedule_id}', [ScheduleController::class, 'saveScheduleData']);
 });
