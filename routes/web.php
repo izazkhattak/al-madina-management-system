@@ -70,5 +70,5 @@ Route::middleware('auth')->group(function () {
         Route::get('/reports', [AllClientReportController::class, 'reports'])->name('reports');
     });
 
-    Route::get('schedule-submit/{schedule_id}', [ScheduleController::class, 'saveScheduleData']);
+    Route::post('schedule-submit/{schedule_id}', [ScheduleController::class, 'saveScheduleData']);
 });

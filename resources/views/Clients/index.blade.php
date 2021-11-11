@@ -105,7 +105,7 @@
                         <td>${d.name}/${d.cnic}</td>
                         <td>${d.project}</td>
                         <td>
-                            <form method="GET" action="{{ url('schedule-submit/${d.schedules[i].id}') }}">
+                            <form onsubmit="return submitForm(this)" method="POST" action="{{ url('schedule-submit/${d.schedules[i].id}') }}">
                                 <span class="edit-row-text">${d.schedules[i].amount_paid}</span>
                                 <input style="display:none" type="number" value="${d.schedules[i].amount_paid}" name="amount_paid">
                             </form>
@@ -137,7 +137,7 @@
                         <td style="font-weight: 500;">Remaining Amount</td>
                         <td style="font-weight: 500;">Total Amount</td>
                         <td style="font-weight: 500;">Installment</td>
-                        <td style="font-weight: 500;">Action</td>
+                        <td style="font-weight: 500;"></td>
                     </tr>
                 </thead>
                 <tbody>
@@ -145,6 +145,12 @@
                 <tbody>
             </table>
         </div>`;
+    }
+
+    function submitForm(form) {
+        let this_form = $(form);
+        this_form.closest('tr').find('.done-shedule-row').trigger('click');
+        return false;
     }
 
     $(document).ready(function() {
@@ -170,11 +176,13 @@
                     url: this_this.closest('tr').find('form').attr('action'),
                     data: this_this.closest('tr').find('form').serialize(),
                     success: function(response) {
-                        console.log(response);
-
-                        if (response.remaining_amount) {
-                            this_this.closest('tr').find('.edit-shedule-text').text(response.remaining_amount);
+                        if (response?.success) {
+                            this_this.closest('tr').find('.edit-row-text').text(response?.schedule?.amount_paid);
+                            this_this.closest('tr').find('.remaining-row-text').text(response?.schedule?.remaining_amount);
+                        } else {
+                            alert(response?.message)
                         }
+
                     }
                 });
             }

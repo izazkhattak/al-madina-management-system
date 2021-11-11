@@ -83,8 +83,31 @@ class ScheduleController extends Controller
         //
     }
 
-    public function saveScheduleData(Request $request)
+    public function saveScheduleData(Request $request, $sheduleID)
     {
-        return $request;
+        $schedule = Schedule::findOrFail($sheduleID);
+        $data['data'] = $withOutFist = $previousRecord = Schedule::where('client_id', $schedule->client_id)
+        ->where('project_id', $schedule->project_id)
+        ->where('id', '<', $schedule->id)->get();
+
+        if ($withOutFist->whereNotNull('amount_paid')->whereNotNull('installments')->count() <= 0) {
+            $scheduleFirst = Schedule::whereNull('installments')->find($sheduleID - 1);
+            if (!$scheduleFirst) {
+                return response()->json(['success' => false, 'data' => $data, 'message' => __('Please update previous record first.')]);
+            }
+        }
+
+        $data['total_sum'] = $totalPreviouslyPaid = $previousRecord->sum('amount_paid');
+        $data['current_remaining'] = $totalCurrentRemaining = $schedule->total_amount - ($totalPreviouslyPaid + $request->amount_paid);
+
+        if ($totalCurrentRemaining < 0) {
+            return response()->json(['success' => false, 'data' => $data, 'message' => __('Paid amount should be not greater then total amount.')]);
+        }
+
+        $schedule->remaining_amount = $totalCurrentRemaining;
+        $schedule->amount_paid = $request->amount_paid;
+        $schedule->save();
+
+        return response()->json(['success' => true, 'schedule' => $schedule, 'message' => __('The data has been saved successfully.')]);
     }
 }
