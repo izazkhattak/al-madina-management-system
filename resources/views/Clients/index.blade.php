@@ -1,7 +1,32 @@
 ﻿@extends('layouts.app_main')
 
 @section('styles')
-
+<style media="print" id = "table_style" type="text/css">
+    body
+    {
+        font-family: Arial;
+        font-size: 10pt;
+    }
+    .table
+    {
+        border: 1px solid #ccc;
+        border-collapse: collapse;
+    }
+    .table th
+    {
+        background-color: #F7F7F7;
+        color: #333;
+        font-weight: bold;
+    }
+    .table th, .table td
+    {
+        padding: 5px;
+        border: 1px solid #ccc;
+    }
+    .hidden-in-print, form, input {
+        display: none;
+    }
+</style>
     <style>
         td.details-control {
             background: url('{{ asset("images/details_open.png") }}') no-repeat center center;
@@ -9,6 +34,16 @@
         }
         tr.shown td.details-control {
             background: url('{{ asset("images/details_close.png") }}') no-repeat center center;
+        }
+        .shedule-table-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            margin: 0 0 10px;
+        }
+        .shedule-table-head h5 {
+            margin: 0
         }
     </style>
 
@@ -94,8 +129,9 @@
     function format ( d ) {
         let i, tablebodydata = '', tableTitle = '';
         tableTitle = `
-            <div>
-                <h5 style="margin-top:0;">Schedule</h5>
+            <div class="shedule-table-head">
+                <h5>Schedule</h5>
+                <button type="button" class="btn btn-primary print-schedule-table" data-table="print-table-${d.id}">Print</button>
             </div>
         `;
         for(i = 0; i < d.schedules.length; i++) {
@@ -105,20 +141,20 @@
                         <td>${d.name}/${d.cnic}</td>
                         <td>${d.project}</td>
                         <td>
+                            <span class="edit-row-text">${d.schedules[i].amount_paid > 0 ? d.schedules[i].amount_paid : ''}</span>
                             <form onsubmit="return submitForm(this)" method="POST" action="{{ url('schedule-submit/${d.schedules[i].id}') }}">
-                                <span class="edit-row-text">${d.schedules[i].amount_paid}</span>
-                                <input style="display:none" type="number" value="${d.schedules[i].amount_paid}" name="amount_paid">
+                                <input style="display:none" type="number" value="${d.schedules[i].amount_paid > 0 ? d.schedules[i].amount_paid : ''}" name="amount_paid">
                             </form>
                         </td>
                         <td>
-                            <span class="remaining-row-text">${d.schedules[i].remaining_amount}</span>
+                            <span class="remaining-row-text">${d.schedules[i].remaining_amount > 0 ? d.schedules[i].remaining_amount : ''}</span>
                         </td>
                         <td>${d.schedules[i].total_amount}</td>
-                        <td>${d.schedules[i].installments}</td>
-                        <td>
+                        <td>${d.schedules[i].installments > 0 ? d.schedules[i].installments : ''}</td>
+                        <td class="hidden-in-print">
                             <span ${d.schedules[i].installments <= 0 ? 'style="display:none"': ''}>
-                                <i class="material-icons edit-shedule-row">mode_edit</i>
-                                <i style="display:none;" class="material-icons done-shedule-row">done</i>
+                                <i class="hidden-in-print material-icons edit-shedule-row">mode_edit</i>
+                                <i style="display:none;" class="hidden-in-print material-icons done-shedule-row">done</i>
                             <span>
                         </td>
                     </tr>
@@ -127,7 +163,7 @@
         // `d` is the original data object for the row
         return `${tableTitle}
         <div class="table-responsive">
-            <table class="table table-striped table-hover">
+            <table class="table table-striped table-hover" id="print-table-${d.id}">
                 <thead>
                     <tr>
                         <td style="font-weight: 500;">Date</td>
@@ -137,7 +173,7 @@
                         <td style="font-weight: 500;">Remaining Amount</td>
                         <td style="font-weight: 500;">Total Amount</td>
                         <td style="font-weight: 500;">Installment</td>
-                        <td style="font-weight: 500;"></td>
+                        <td style="font-weight: 500;" class="hidden-in-print"></td>
                     </tr>
                 </thead>
                 <tbody>
@@ -154,6 +190,29 @@
     }
 
     $(document).ready(function() {
+        $(document).on('click', '.print-schedule-table', function () {
+            //Get the HTML of div
+            let tableID = $(this).data('table');
+            var printWindow = window.open('', '', '');
+            printWindow.document.write('<html><head><title>Client Schedules</title>');
+
+            //Print the Table CSS.
+            var table_style = document.getElementById("table_style").innerHTML;
+            printWindow.document.write('<style type = "text/css">');
+            printWindow.document.write(table_style);
+            printWindow.document.write('</style>');
+            printWindow.document.write('</head>');
+
+            //Print the DIV contents ie. the HTML Table.
+            printWindow.document.write('<body>');
+            printWindow.document.write(document.getElementById(tableID).outerHTML);
+            printWindow.document.write('</body>');
+
+            printWindow.document.write('</html>');
+            printWindow.print();
+            printWindow.close();
+        })
+
         $(document).on('click', '.edit-shedule-row', function() {
             let this_this = $(this);
             this_this.closest('tr').find('input').show();
