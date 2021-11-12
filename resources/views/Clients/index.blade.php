@@ -5,7 +5,7 @@
     body
     {
         font-family: Arial;
-        font-size: 10pt;
+        font-size: 8pt;
     }
     .table
     {
@@ -26,6 +26,13 @@
     .hidden-in-print, form, input {
         display: none;
     }
+    .show-in-print {
+        display: inline-block;
+        width: 114px;
+        margin: 0 0 7px;
+        max-width: 100%;
+        height: auto;
+    }
 </style>
     <style>
         td.details-control {
@@ -44,6 +51,10 @@
         }
         .shedule-table-head h5 {
             margin: 0
+        }
+
+        .show-in-print {
+            display: none;
         }
     </style>
 
@@ -134,7 +145,15 @@
                 <button type="button" class="btn btn-primary print-schedule-table" data-table="print-table-${d.id}">Print</button>
             </div>
         `;
+        var intVal = function ( i ) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '')*1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+        let totalAmount = 0;
         for(i = 0; i < d.schedules.length; i++) {
+            totalAmount = d.schedules[i].amount_paid > 0 ? totalAmount + intVal(d.schedules[i].amount_paid) : totalAmount + 0;
             tablebodydata += `
                     <tr>
                         <td>${d.schedules[i].due_date}</td>
@@ -160,9 +179,16 @@
                     </tr>
                 `;
             }
+            tablebodydata += `
+                <tr>
+                    <td colspan="4" class="text-right">Total Paid Amount: ${totalAmount}</td>
+                    <td colspan="4"></td>
+                </tr>
+            `;
         // `d` is the original data object for the row
         return `${tableTitle}
-        <div class="table-responsive">
+        <div class="table-responsive" id="print-table-${d.id}">
+            <img src="{{ asset('images/green-farm-house-logo.png') }}" class="show-in-print">
             <table class="table table-striped table-hover" id="print-table-${d.id}">
                 <thead>
                     <tr>
@@ -210,7 +236,7 @@
 
             printWindow.document.write('</html>');
             printWindow.print();
-            printWindow.close();
+            // printWindow.close();
         })
 
         $(document).on('click', '.edit-shedule-row', function() {
