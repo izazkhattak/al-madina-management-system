@@ -33,6 +33,12 @@
         max-width: 100%;
         height: auto;
     }
+    .text-right {
+        text-align: right;
+    }
+    .text-center {
+        text-align: center;
+    }
 </style>
     <style>
         td.details-control {
