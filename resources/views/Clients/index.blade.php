@@ -242,7 +242,7 @@
 
             printWindow.document.write('</html>');
             printWindow.print();
-            // printWindow.close();
+            printWindow.close();
         })
 
         $(document).on('click', '.edit-shedule-row', function() {
