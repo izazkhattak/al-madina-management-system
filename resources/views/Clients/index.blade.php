@@ -194,18 +194,18 @@
         // `d` is the original data object for the row
         return `${tableTitle}
         <div class="table-responsive" id="print-table-${d.id}">
-            <img src="{{ asset('images/green-farm-house-logo.png') }}" class="show-in-print">
+            <img src="{{ asset('images/green-farm-house-logo.png') }}" class="show-in-print" style="margin-bottom:10px;">
             <table class="table table-striped table-hover" id="print-table-${d.id}">
                 <thead>
                     <tr>
-                        <td style="font-weight: 500;">Date</td>
-                        <td style="font-weight: 500;">Client</td>
-                        <td style="font-weight: 500;">Project</td>
-                        <td style="font-weight: 500;">Amount Paid</td>
-                        <td style="font-weight: 500;">Remaining Amount</td>
-                        <td style="font-weight: 500;">Total Amount</td>
-                        <td style="font-weight: 500;">Installment</td>
-                        <td style="font-weight: 500;" class="hidden-in-print"></td>
+                        <td style="font-weight: 600;">Date</td>
+                        <td style="font-weight: 600;">Client</td>
+                        <td style="font-weight: 600;">Project</td>
+                        <td style="font-weight: 600;">Amount Paid</td>
+                        <td style="font-weight: 600;">Remaining Amount</td>
+                        <td style="font-weight: 600;">Total Amount</td>
+                        <td style="font-weight: 600;">Installments</td>
+                        <td style="font-weight: 600;" class="hidden-in-print"></td>
                     </tr>
                 </thead>
                 <tbody>
@@ -242,7 +242,7 @@
 
             printWindow.document.write('</html>');
             printWindow.print();
-            printWindow.close();
+           // printWindow.close();
         })
 
         $(document).on('click', '.edit-shedule-row', function() {

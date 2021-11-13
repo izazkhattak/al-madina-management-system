@@ -83,7 +83,7 @@ class ClientController extends Controller
         $getProject = $getProjectPlan->project;
 
         $totalAmount = $data['total_amount'];
-        if (!isset($getProject->project_type) && $getProject->project_type != '2') {
+        if ($getProject->project_type != '2') {
             $installmentYearMonths = $getProjectPlan->installment_years * 12;
             // Calculated monthly installments;
             $data['monthly_installments'] = ($totalAmount - $data['down_payment']) / $installmentYearMonths;
