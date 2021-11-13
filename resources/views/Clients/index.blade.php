@@ -5,7 +5,7 @@
     body
     {
         font-family: Arial;
-        font-size: 8pt;
+        font-size: 10pt;
     }
     .table
     {
@@ -187,7 +187,7 @@
             }
             tablebodydata += `
                 <tr>
-                    <td colspan="4" class="text-right">Total Paid Amount: ${totalAmount}</td>
+                    <td colspan="4" class="text-right">Total Paid: ${totalAmount.toLocaleString()} PKR</td>
                     <td colspan="4"></td>
                 </tr>
             `;

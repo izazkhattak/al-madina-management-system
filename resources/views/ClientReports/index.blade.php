@@ -39,7 +39,7 @@
                             </div>
                         </div>
                         <div class="table-responsive p-t-10 table-reports-main hidden">
-                            <table class="table table-striped table-hover js-exportable dataTable">
+                            <table class="table table-striped table-hover table-bordered table-sm js-exportable dataTable">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -147,7 +147,18 @@
             dom: 'Bfrtip',
             responsive: true,
             buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
+            { extend: 'csv', footer: true },
+            { extend: 'pdf', footer: true },
+            { extend: 'excel', footer: true },
+            { extend: 'print', footer: true,
+            customize: function ( win ) {
+                    $(win.document.body)
+                        .css( 'font-size', '10pt' )
+                        .prepend(
+                            '<img src="{{ asset("images/green-farm-house-logo.png") }}" style="position:fixed; top:0; right:0; width:12%" />'
+                        );
+                }
+                 }
             ],
             "serverSide": true,
             "processing": true,
