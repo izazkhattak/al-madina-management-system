@@ -44,8 +44,8 @@
                                     <tr>
                                         <th>Name</th>
                                         <th>Due Date</th>
-                                        <th>Paid Amount</th>
-                                        <th>Paid On</th>
+                                        <th>Paid Received</th>
+                                        <th>Date Received</th>
                                         <th>Remaining Amount</th>
                                         <th>Total Amount</th>
                                         <th>Surcharge</th>

@@ -163,18 +163,23 @@
             tablebodydata += `
                     <tr>
                         <td>${d.schedules[i].due_date}</td>
-                        <td>${d.name}/${d.cnic}</td>
-                        <td>${d.project}</td>
+                        <td>
+                            <span>${d.schedules[i].date_received != null ? d.schedules[i].date_received : ''}</span>                         
+                            
+                            
+                        </td>
+                        
                         <td>
                             <span class="edit-row-text">${d.schedules[i].amount_paid > 0 ? d.schedules[i].amount_paid : ''}</span>
                             <form onsubmit="return submitForm(this)" method="POST" action="{{ url('schedule-submit/${d.schedules[i].id}') }}">
+
                                 <input style="display:none" type="number" value="${d.schedules[i].amount_paid > 0 ? d.schedules[i].amount_paid : ''}" name="amount_paid">
+                                <input style="display:none" type="date" value="${d.schedules[i].date_received > 0 ? d.schedules[i].date_received : ''}" name="date_received">
                             </form>
                         </td>
                         <td>
                             <span class="remaining-row-text">${d.schedules[i].remaining_amount > 0 ? d.schedules[i].remaining_amount : ''}</span>
                         </td>
-                        <td>${d.schedules[i].total_amount}</td>
                         <td>${d.schedules[i].installments > 0 ? d.schedules[i].installments : ''}</td>
                         <td class="hidden-in-print">
                             <span ${d.schedules[i].installments <= 0 ? 'style="display:none"': ''}>
@@ -193,17 +198,23 @@
             `;
         // `d` is the original data object for the row
         return `${tableTitle}
-        <div class="table-responsive" id="print-table-${d.id}">
-            <img src="{{ asset('images/green-farm-house-logo.png') }}" class="show-in-print" style="margin-bottom:10px;">
-            <table class="table table-striped table-hover" id="print-table-${d.id}">
+
+        <div class="table-responsive" id="print-table-${d.id}" style="width:100%">
+        <img src="{{ asset('images/green-farm-house-logo.png') }}" class="show-in-print " style="float: right;position: absolute;right: 30px;margin-top: 10px;" >
+        <div style="margin-bottom:20px; margin-top:10px;">      
+        
+        <h3 class="show-in-print" style="width:100%"><strong>Client Name: </strong> ${d.name} </h3><br>
+        <h3 class="show-in-print" style="width:100%"><strong>Project Name: </strong> ${d.project} </h3><br>
+        <h3 class="show-in-print" style="width:100%;"><strong>Total Amount: </strong> ${d.total_amount} </h3>        
+        </div>
+            <table class="table table-striped table-hover" id="print-table-${d.id}" style="width:100%">
                 <thead>
                     <tr>
-                        <td style="font-weight: 600;">Date</td>
-                        <td style="font-weight: 600;">Client</td>
-                        <td style="font-weight: 600;">Project</td>
-                        <td style="font-weight: 600;">Amount Paid</td>
+                        <td style="font-weight: 600;">Due Date</td>
+                        <td style="font-weight: 600;">Date Received</td>
+                        
+                        <td style="font-weight: 600;">Amount Received</td>
                         <td style="font-weight: 600;">Remaining Amount</td>
-                        <td style="font-weight: 600;">Total Amount</td>
                         <td style="font-weight: 600;">Installments</td>
                         <td style="font-weight: 600;" class="hidden-in-print"></td>
                     </tr>

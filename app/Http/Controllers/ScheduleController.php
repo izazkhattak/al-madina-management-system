@@ -106,6 +106,7 @@ class ScheduleController extends Controller
 
         $schedule->remaining_amount = $totalCurrentRemaining;
         $schedule->amount_paid = $request->amount_paid;
+        $schedule->date_received = $request->date_received;        
         $schedule->save();
 
         return response()->json(['success' => true, 'schedule' => $schedule, 'message' => __('The data has been saved successfully.')]);
