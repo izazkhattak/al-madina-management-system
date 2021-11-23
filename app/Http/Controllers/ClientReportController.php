@@ -27,7 +27,7 @@ class ClientReportController extends Controller
         $projectPlans = ProjectPlan::where('project_id', $projectID)->get();
         $html = '<option value="">Please select a plan</option>';
         foreach ($projectPlans as $item) {
-            $html .= "<option value='$item->id'>" . $item->installment_years . " Year's" . "</option>";
+            $html .= "<option value='$item->id' data-year='$item->installment_years'>" . $item->installment_years . " Year's" . "</option>";
         }
         return response()->json(['success'=> true, 'html'=> $html]);
     }
@@ -38,7 +38,8 @@ class ClientReportController extends Controller
         $clients = Client::where('project_plan_id', $projectPlanID)->get();
         $html = '<option value="">Please select a Client</option>';
         foreach ($clients as $item) {
-            $html .= "<option value='$item->id'>$item->name / $item->cnic</option>";
+            $amount = number_format($item->total_amount);
+            $html .= "<option value='$item->id' data-name='$item->name' data-amount='$amount'>$item->name / $item->cnic</option>";
         }
         return response()->json(['success'=> true, 'html'=> $html]);
     }

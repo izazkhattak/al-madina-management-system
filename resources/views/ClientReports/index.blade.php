@@ -19,7 +19,7 @@
                                     <option value="">Please select a project</option>
                                     @forelse ($projects as $project)
 
-                                    <option {{ isset($projectID) && $projectID == $project->id ? 'selected' : '' }} value="{{ $project->id }}">{{ $project->title }}</option>
+                                    <option {{ isset($projectID) && $projectID == $project->id ? 'selected' : '' }} value="{{ $project->id }}" data-title="{{ $project->title }}">{{ $project->title }}</option>
 
                                     @empty
                                     @endforelse
@@ -42,20 +42,16 @@
                             <table class="table table-striped table-hover table-bordered table-sm js-exportable dataTable">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Due Date</th>
-                                        <th>Paid Received</th>
+                                        
+                                        
                                         <th>Date Received</th>
+                                        <th>Amount Received</th>
                                         <th>Remaining Amount</th>
-                                        <th>Total Amount</th>
                                         <th>Surcharge</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -92,6 +88,10 @@
 
 <script defer>
     $(document).ready(() => {
+        var projectName;
+        var clientName;
+        var projectYear;
+        var totalAmount;
         $(document).on('change', '#project_id', function() {
             $.ajax({
                 type: 'GET',
@@ -140,6 +140,11 @@
             $('.table-reports-main table').DataTable().ajax.url("{{ route('client-reports.get-reports') }}?project_id=" + project_id + "&client_id=" + client_id).load();
             $('.table-reports-main table').css('width', '100%');
             $('.table-reports-main').removeClass('hidden');
+
+             projectName = $('#project_id').find('option:selected').data('title');
+             clientName = $('#client_id').find('option:selected').data('name');
+             projectYear = $('#project_plan_id').find('option:selected').data('year');
+             totalAmount = $('#client_id').find('option:selected').data('amount');
         });
 
         //Exportable table
@@ -147,20 +152,24 @@
             dom: 'Bfrtip',
             responsive: true,
             buttons: [
-            { extend: 'csv', footer: true },
-            { extend: 'pdf', footer: true },
-            { extend: 'excel', footer: true },
-            { extend: 'print', footer: true,
+            { extend: 'csv', footer: true , title: '' },
+            { extend: 'pdf', footer: true , title: '' },
+            { extend: 'excel', footer: true , title: '' },
+            { extend: 'print', footer: true , title: '',
             customize: function ( win ) {
                     $(win.document.body)
                         .css( 'font-size', '10pt' )
                         .prepend(
-                            '<img src="{{ asset("images/green-farm-house-logo.png") }}" style="position:fixed; top:0; right:0; width:12%" />'
+                            '<img src="{{ asset("images/green-farm-house-logo.png") }}" style="position:fixed; top:0; right:0; width:15%" />',
+                            `<strong>Client Name :</strong> `+ clientName +`  <br>`,
+                            `<strong>Project Name :</strong> `+ projectName +` - ` +projectYear +` Year's  <br>`,
+                            `<strong>Total Amount :</strong> `+ totalAmount +`  <br>`,
+
                         );
                 }
                  }
             ],
-            "serverSide": true,
+            "serverSide": false,
             "processing": true,
             "pageLength": 25,
             "ajax": {
@@ -168,12 +177,9 @@
                 url: "{{ route('client-reports.get-reports') }}"
             },
             "columns": [
-                { "data": "name" },
-                { "data": "due_date" },
-                { "data": "paid" },
                 { "data": "paid_on" },
+                { "data": "paid" },
                 { "data": "out_stand" },
-                { "data": "due_amount" },
                 { "data": "sur_charge" }
             ],
             "footerCallback": function ( row, data, start, end, display ) {
@@ -191,14 +197,14 @@
                 //******Total Paid Calculation****************///
                 //******************************////
                 let pageTotal = api
-                    .column( 2, { page: 'current'} )
+                    .column( 1, { page: 'current'} )
                     .data()
                     .reduce( function (a, b) {
                         return intVal(a) + intVal(b);
                     }, 0 );
 
                 // Update footer
-                $( api.column( 2 ).footer() ).html(
+                $( api.column( 1 ).footer() ).html(
                     'Total Paid: ' + pageTotal.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 );
                 //******************************////
@@ -220,14 +226,14 @@
                 //******Sur Charge Calculation****************///
                 //******************************////
                 let pageTotalSurchange = api
-                    .column( 6, { page: 'current'} )
+                    .column( 3, { page: 'current'} )
                     .data()
                     .reduce( function (a, b) {
                         return intVal(a) + intVal(b);
                     }, 0 );
 
                 // Update footer
-                $( api.column( 6 ).footer() ).html(
+                $( api.column( 3 ).footer() ).html(
                     'Sur Charge: ' + pageTotalSurchange.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 );
             }
